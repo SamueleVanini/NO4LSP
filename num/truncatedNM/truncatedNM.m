@@ -1,7 +1,7 @@
-function [x_found, f_x, norm_grad_f_x, iteration, failure] = ...
+function [x_found, f_x, norm_grad_f_x, iteration, failure, flag] = ...
     truncatedNM(f, grad_f, hess_f, x_initial, max_iteration, ...
     tollerance, c1, rho, max_backtrack, do_pcg_precond)
-%TRUNCATEDNM Truncated Newton Method, for minimazing a scalar function
+%TRUNCATEDNM Truncated Newton Method
 %   Detailed explanation goes here
 
 % -- Initialization --
@@ -18,8 +18,8 @@ pcg_maxit = 50;
 i = 0;
 failure = false;
 
-while i < max_iteration && ...      % iteration
-        norm_grad_f_xk >= tollerance % stopping condition
+while i < max_iteration && ...          % iteration
+        norm_grad_f_xk >= tollerance    % stopping condition
     
     % -- Compute descent direction --
     % Compute the preconditioning matrix for pcg
@@ -72,5 +72,19 @@ x_found = x_k;
 f_x = f_xk;
 norm_grad_f_x = norm_grad_f_xk;
 iteration = i;
+
+if ~failure
+    if iteration >= max_iteration
+        if norm_grad_f_x < tollerance
+            flag = 'Satisfyed the tollerance';
+        else
+            flag = 'Reached maximum number of iteration without satisfying the tollerance';
+        end
+    else
+        flag = 'Satisfyed the tollerance';
+    end
+else
+    flag = 'Failure: Could not satisfy Armijo';
+end
 
 end
