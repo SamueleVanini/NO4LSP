@@ -12,7 +12,7 @@ grad_f_xk = grad_f(x_k);
 norm_grad_f_xk = norm(grad_f_xk);
 
 x_sequence = zeros(length(x_initial), max_iteration);
-pcg_sequence = zeros(2, max_iteration);     % [iteration + flag] saved at each iteration
+pcg_sequence = zeros(3, max_iteration); % [iteration + flag + precond] saved at each iteration
 backtrack_sequence = zeros(max_iteration);
 
 % -- PCG fixed parameters --
@@ -29,8 +29,17 @@ while i < max_iteration && ...          % iteration
     % -- Compute descent direction --
     % Compute the preconditioning matrix for pcg
     A = hess_f(x_k);
+    precond_type = -1; % no preconditioning
     if do_pcg_precond
-        precond = ichol(sparse(A));
+        try
+            % ichol is more stable and better option for preconditioning
+            precond = ichol(sparse(A));
+            precond_type = 1; % ichol
+        catch ME
+            % A is not SPD matrix, using ilu preconditioning
+            precond = ilu(sparse(A));
+            precond_type = 2; % ilu
+        end
     end
 
     % Using -grad_f(xk) as starting point will guarantee that pcg will
@@ -73,7 +82,7 @@ while i < max_iteration && ...          % iteration
 
     x_sequence(:, i) = x_k;
     backtrack_sequence(i) = b;
-    pcg_sequence(:, i) = [pcg_iter; pcg_flag];
+    pcg_sequence(:, i) = [pcg_iter; pcg_flag; precond_type];
 end
 
 % -- Final result --
