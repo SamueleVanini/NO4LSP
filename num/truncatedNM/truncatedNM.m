@@ -1,4 +1,5 @@
-function [x_found, f_x, norm_grad_f_x, iteration, failure, flag] = ...
+function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
+    x_sequence, backtrack_sequence, pcg_sequence] = ...
     truncatedNM(f, grad_f, hess_f, x_initial, max_iteration, ...
     tollerance, c1, rho, max_backtrack, do_pcg_precond)
 %TRUNCATEDNM Truncated Newton Method
@@ -9,6 +10,10 @@ x_k = x_initial;
 f_xk = f(x_k);
 grad_f_xk = grad_f(x_k);
 norm_grad_f_xk = norm(grad_f_xk);
+
+x_sequence = zeros(length(x_initial), max_iteration);
+pcg_sequence = zeros(2, max_iteration);     % [iteration + flag] saved at each iteration
+backtrack_sequence = zeros(max_iteration);
 
 % -- PCG fixed parameters --
 precond = []; % default value
@@ -30,7 +35,7 @@ while i < max_iteration && ...          % iteration
 
     % Using -grad_f(xk) as starting point will guarantee that pcg will
     % return a descent direction, even if pcg fails
-    [desc_dir, ~, ~, ~, ~] = ...
+    [desc_dir, pcg_flag, ~, pcg_iter, ~] = ...
         pcg(A, -grad_f_xk, pcg_tol, pcg_maxit, precond, precond', -grad_f_xk);
 
     % -- Backtracking --
@@ -65,6 +70,10 @@ while i < max_iteration && ...          % iteration
     norm_grad_f_xk = norm(grad_f_xk);
 
     i = i + 1;
+
+    x_sequence(:, i) = x_k;
+    backtrack_sequence(i) = b;
+    pcg_sequence(:, i) = [pcg_iter; pcg_flag];
 end
 
 % -- Final result --
@@ -73,6 +82,12 @@ f_x = f_xk;
 norm_grad_f_x = norm_grad_f_xk;
 iteration = i;
 
+% -- Resize sequence variables --
+x_sequence = [x_initial, x_sequence(:, 1:iteration)];
+backtrack_sequence = backtrack_sequence(1:iteration);
+pcg_sequence = pcg_sequence(:, 1:iteration);
+
+% -- Flag output --
 if ~failure
     if iteration >= max_iteration
         if norm_grad_f_x < tollerance
