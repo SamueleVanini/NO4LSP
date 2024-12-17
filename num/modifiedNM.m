@@ -1,6 +1,6 @@
 function [xk, fk, gradfk_norm, k, xseq, btseq] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax)
+    toleig, kmax, tolgrad, c1, rho, btmax)
 
 % Function handle for the armijo condition
 farmijo = @(fk, alpha, c1_gradfk_pk) ...
@@ -16,18 +16,23 @@ gradfk = gradf(xk);
 k = 0;
 gradfk_norm = norm(gradfk);
 
+n = len(fk);
+
 while k < kmax && gradfk_norm >= tolgrad
     
     % Define Bk
     Bk = Hessf(xk);
 
-    % TODO choose the method for P.D. check
     % Check that Bk is sufficiently P.D. (eig() or Cholesky fact chol())
+    smallest_eig_k = eigs(A, 1, 'smallestreal'); % TODO choose the method for P.D. check
+    if smallest_eig_k < toleig:
+        % apply Ek = tauk * I as in noted ()
+        tauk = max(0, toleig - smallest_eig_k);
+        Ek = tauk * eye(size(Bk));
+        Bk = Bk + Ek; % TODO try different hessian corrections
+    end
     
-    % TODO try different hessian corrections
-    % If not: apply Ek = tauk * I as in noted ()
-    
-    % Continue with the standard newton method
+    % Continue with the common newton method with backtracking
     [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk);
     
     % Reset the value of alpha
