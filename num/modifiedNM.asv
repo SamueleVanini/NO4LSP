@@ -24,10 +24,9 @@ while k < kmax && gradfk_norm >= tolgrad
     % TODO choose the method for P.D. check
     % Check that Bk is sufficiently P.D. (eig() or Cholesky fact chol())
     
-    % TODO try different hessian corrections
+    % TODO try different hessian corr
     % If not: apply Ek = tauk * I as in noted ()
     
-    % Continue with the standard newton method
     [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk);
     
     % Reset the value of alpha
@@ -35,7 +34,6 @@ while k < kmax && gradfk_norm >= tolgrad
     
     % Compute the candidate new xk
     xnew = xk + alpha * pk;
-    
     % Compute the value of f in the candidate new xk
     fnew = f(xnew);
     
@@ -75,7 +73,6 @@ end
 % "Cut" xseq and btseq to the correct size
 xseq = xseq(:, 1:k);
 btseq = btseq(1:k);
-
 % "Add" x0 at the beginning of xseq (otherwise the first el. is x1)
 xseq = [x0, xseq];
 
