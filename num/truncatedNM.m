@@ -17,7 +17,7 @@ backtrack_sequence = zeros(max_iteration);
 
 % -- PCG fixed parameters --
 precond = []; % default value
-pcg_tol = 1e-7;
+pcg_tol = 1e-6;
 pcg_maxit = 50;
 
 i = 0;
@@ -43,9 +43,17 @@ while i < max_iteration && ...          % iteration
     end
 
     % Using -grad_f(xk) as starting point will guarantee that pcg will
-    % return a descent direction, even if pcg fails
-    [desc_dir, pcg_flag, ~, pcg_iter, ~] = ...
+    % return a descent direction, even if matrix A is not SPD
+    [desc_dir, pcg_flag, res, pcg_iter, ~] = ...
         pcg(A, -grad_f_xk, pcg_tol, pcg_maxit, precond, precond', -grad_f_xk);
+    
+    % Check for pcg failure
+    if pcg_flag == 1
+        failure = 1;
+        flag = sprintf("Failure: pcg did %d iteration but did not converge." + ...
+            " resrel = %.3g", pcg_iter, res);
+        break
+    end
 
     % -- Backtracking --
     alpha = 1; % this ensure quadratic convergence in the long run
@@ -69,6 +77,7 @@ while i < max_iteration && ...          % iteration
     if b >= max_backtrack && ...
         f_new > f_xk + alpha*c1*grad_f_xk'*desc_dir
         failure = true;
+        flag = 'Failure: Could not satisfy Armijo';
         break
     end
 
@@ -107,8 +116,6 @@ if ~failure
     else
         flag = 'Satisfyed the tollerance';
     end
-else
-    flag = 'Failure: Could not satisfy Armijo';
 end
 
 end
