@@ -16,8 +16,6 @@ gradfk = gradf(xk);
 k = 0;
 gradfk_norm = norm(gradfk);
 
-n = size(fk);
-
 while k < kmax && gradfk_norm >= tolgrad
     
     % Define Bk
