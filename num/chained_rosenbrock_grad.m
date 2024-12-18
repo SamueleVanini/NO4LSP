@@ -4,8 +4,11 @@ function gradF = chained_rosenbrock_grad(x)
     %   x : n-dimensional vector
     % Output:
     %   gradF : n-dimensional gradient vector
-
+    
+    % Dimension of input vector
     n = length(x);
+    
+    % Preallocate function value
     gradF = zeros(n, 1);
 
     % First component (j = 1)
