@@ -3,7 +3,7 @@ function H = rosenbrock_hess(x)
     % Input:
     %   x : 2-dimensional vector [x1; x2]
     % Output:
-    %   H : (2x2) Hessian matrix (tri-diagonal)
+    %   H : (2 x 2) Hessian matrix (tri-diagonal)
     
     x1 = x(1);
     x2 = x(2);
