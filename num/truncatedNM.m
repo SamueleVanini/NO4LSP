@@ -107,14 +107,12 @@ pcg_sequence = pcg_sequence(:, 1:iteration);
 
 % -- Flag output --
 if ~failure
-    if iteration >= max_iteration
-        if norm_grad_f_x < tollerance
-            flag = 'Satisfyed the tollerance';
-        else
-            flag = 'Reached maximum number of iteration without satisfying the tollerance';
-        end
+    if norm_grad_f_x < tollerance
+        flag = sprintf('Satysfied the tollerance in %d iteration', iteration);
     else
-        flag = 'Satisfyed the tollerance';
+        flag = sprintf(['Failure: tnm did %d iteration but did not converge. ' ...
+            'Norm of the gradient = %.3g'], iteration, norm_grad_f_x);
+        failure = true;
     end
 end
 
