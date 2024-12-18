@@ -25,7 +25,7 @@ while k < kmax && gradfk_norm >= tolgrad
 
     % Check that Bk is sufficiently P.D. (eig() or Cholesky fact chol())
     smallest_eig_k = eigs(A, 1, 'smallestreal'); % TODO choose the method for P.D. check
-    if smallest_eig_k < toleig:
+    if smallest_eig_k < toleig
         % apply Ek = tauk * I as in noted ()
         tauk = max(0, toleig - smallest_eig_k);
         Ek = tauk * eye(size(Bk));
