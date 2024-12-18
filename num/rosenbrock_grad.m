@@ -3,7 +3,7 @@ function g = rosenbrock_grad(x)
     % Input:
     %   x : 2-dimensional vector [x1; x2]
     % Output:
-    %   g : Gradient vector [g1; g2]
+    %   g : gradient vector [g1; g2]
     
     x1 = x(1);
     x2 = x(2);

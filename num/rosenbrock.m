@@ -3,7 +3,7 @@ function f = rosenbrock(x)
     % Input:
     %   x : 2-dimensional vector [x1; x2]
     % Output:
-    %   f : Function value at x
+    %   f : function value at x
     
     x1 = x(1);
     x2 = x(2);
