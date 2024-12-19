@@ -114,6 +114,7 @@ xlabel('Iteration');
 ylabel('Number of Backtracking Loops');
 legend({'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
 grid on;
+
 %% Plot the Iterates
 figure;
 
