@@ -9,9 +9,7 @@ function HessF = extended_powell_hess(x, alpha)
     % Dimension of input vector
     n = length(x);
     
-    % Ensure input dimension is even
-    % TODO corret? Here it is usless theoretically, but implemented in grad
-    % and fun eval
+    % Ensure input dimension is even (useless, but provided for coherence)
     if mod(n, 2) ~= 0
         error('Input dimension n must be even for the Extended Powel function.');
     end
@@ -28,6 +26,6 @@ function HessF = extended_powell_hess(x, alpha)
         % Off-diagonal elements (symm. tri-diagonal)
         temp = 0.5 * alpha;
         HessF(i, i+1) = temp;
-        HessF(i, i+1) = temp;
+        HessF(i+1, i) = temp;
     end
 end

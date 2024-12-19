@@ -2,8 +2,8 @@
 % Clear the workspace and command window
 clc; clear; close all;
 
-% Add path to functions (if necessary)
-% addpath('functions_directory'); 
+% Add path to functions
+addpath('test_problems_for_unconstrained_optimization\'); 
 
 % Parameters
 rho = 0.5;        % Backtracking reduction factor
@@ -14,7 +14,7 @@ btmax = 50;       % Maximum backtracking steps
 kmax = 1000;      % Maximum iterations
 
 % Starting points
-x0_1 = [-1.2; -1.2];
+x0_1 = [1.2; 1.2];
 x0_2 = [-1.2; 1];
 
 %% Define Rosenbrock Function, Gradient, and Hessian
@@ -34,6 +34,10 @@ fprintf('Test with starting point x0 = %f\n', x0_1);
     modifiedNM(x0_1, f, gradf, Hessf, ...
     toleig, kmax, tolgrad, c1, rho, btmax);
 
+% [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
+%     truncatedNM(f, gradf, Hessf, x0_1, kmax, ...
+%     tolgrad, c1, rho, btmax, false);
+
 % Display results
 fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));
 fprintf('Function Value: %e\n', fk1);
@@ -46,6 +50,10 @@ fprintf('Test with starting point x0 = %f\n', x0_2);
 [xk2, fk2, gradfk_norm2, k2, xseq2, btseq2] = ...
     modifiedNM(x0_2, f, gradf, Hessf, ...
     toleig, kmax, tolgrad, c1, rho, btmax);
+
+% [xk2, fk2, gradfk_norm2, k2, xseq2, btseq2] = ...
+%     truncatedNM(f, gradf, Hessf, x0_2, kmax, ...
+%     tolgrad, c1, rho, btmax, false);
 
 % Display results
 fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));

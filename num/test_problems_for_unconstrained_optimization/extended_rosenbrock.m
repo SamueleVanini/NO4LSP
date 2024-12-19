@@ -9,7 +9,6 @@ function F = extended_rosenbrock(x)
     n = length(x);
     
     % Check that input dimension is even
-    % TODO correct?
     if mod(n, 2) ~= 0
         error('Input dimension n must be even for the Extended Rosenbrock function.');
     end

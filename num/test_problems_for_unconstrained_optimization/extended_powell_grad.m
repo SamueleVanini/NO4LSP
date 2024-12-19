@@ -10,7 +10,6 @@ function gradF = extended_powell_grad(x, alpha)
     n = length(x);
     
     % Ensure input dimension is even
-    % TODO corret?
     if mod(n, 2) ~= 0
         error('Input dimension n must be even for the Extended Powel function.');
     end
