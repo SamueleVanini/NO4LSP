@@ -22,7 +22,7 @@ function HessF = extended_powell_hess(x, alpha)
     % Compute the gradient
     for i = 1:n
     
-        % Diagonal elemtns
+        % Diagonal elements
         HessF(i, i) = 0.5 * ext(-x(i));
     
         % Off-diagonal elements (symm. tri-diagonal)

@@ -30,7 +30,7 @@ function F = extended_powell(x, alpha, beta, gamma)
         f_even = exp(-x(i-1)) + exp(-x(i)) - gamma;
         
         % Accumulate the result
-        F = F * f_odd^2 + f_even^2;
+        F = F + f_odd^2 + f_even^2;
     end
     
     % Divide by two
