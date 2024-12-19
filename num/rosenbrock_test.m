@@ -1,5 +1,6 @@
 clear
 clc
+close all
 
 %% Variables initializaiton
 load rosenbrock.mat
@@ -12,10 +13,10 @@ tollerance = 1e-8;
 c1 = 1e-4;
 rho = .7;
 max_backtrack = 50;
-do_precon = true;
+do_precon = false;
 
 %% Apply Truncated Newthon Method
-for i = 1
+for i = 1:2
     x_initial = x(:, i);    
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
         x_seq, backtrack_seq, pcg_seq] = ...
@@ -57,8 +58,19 @@ for i = 1
     end
     hold off
 
-    % -- 3D plot --
-    disp('3D plot');
+    % -- Surface plot --
+    disp('Surface plot');
+
+    surf_fig = figure();
+    surf(X, Y, Z, 'EdgeColor', 'none');
+
+    hold on
+    plot3(x_seq(1, 1), x_seq(2, 1), ros_f(x_seq(:, 1)), 'ro');
+    if size(x_seq, 2) > 1
+        plot3(x_seq(1, 1:2), x_seq(2, 1:2), ros_f(x_seq(:, 1:2)), 'r--');
+        plot3(x_seq(1, 2:end), x_seq(2, 2:end), ros_f(x_seq(:, 2:end)), 'r--x');
+    end
+    hold off
 
     disp('------------------------'); 
 end
