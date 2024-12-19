@@ -3,7 +3,7 @@ function HessF = chained_rosenbrock_hess(x)
     % Input:
     %   x : n-dimensional vector
     % Output:
-    %   HessF : (n x n) Hessian matrix (symm. tri-diagonal)
+    %   HessF : (n x n) Hessian matrix (symmetric tri-diagonal)
     
     % Dimension of input vector
     n = length(x);
