@@ -28,7 +28,7 @@ gradf = @(x) rosenbrock_grad(x);
 Hessf = @(x) rosenbrock_hess(x);
 
 %% Test the Modified Newton's Method - Starting Point 1
-fprintf('Test with starting point x0 = %f\n', x0_1);
+fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
     modifiedNM(x0_1, f, gradf, Hessf, ...
@@ -43,6 +43,7 @@ fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);
 fprintf('Iterations: %d\n', k1);
+fprintf('\n');
 
 %% Test the Modified Newton's Method - Starting Point 2
 fprintf('Test with starting point x0 = [%f, %f]\n', x0_2);
@@ -60,6 +61,7 @@ fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));
 fprintf('Function Value: %e\n', fk2);
 fprintf('Gradient Norm: %e\n', gradfk_norm2);
 fprintf('Iterations: %d\n', k2);
+fprintf('\n');
 
 %% Surface Plot and Contour Lines
 figure;
@@ -130,4 +132,4 @@ xlabel('x_1'); ylabel('x_2');
 grid on;
 
 %% End
-fprintf('\nTest Completed!\n');
+fprintf('Test Completed!\n');
