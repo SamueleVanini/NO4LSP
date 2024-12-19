@@ -1,5 +1,5 @@
 function f = rosenbrock(x)
-    % ROSENBROCK Function definition
+    % ROSENBROCK Rosenbrock function evaluation
     % Input:
     %   x : 2-dimensional vector [x1; x2]
     % Output:

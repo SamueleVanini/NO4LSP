@@ -1,5 +1,5 @@
 function F = chained_rosenbrock(x)
-    % CHAINED_ROSENBROCK Function definition
+    % CHAINED_ROSENBROCK Chained Rosenbrock function evaluation
     % Input:
     %   x : n-dimensional vector
     % Output:
@@ -13,6 +13,6 @@ function F = chained_rosenbrock(x)
     
     % Compute the function
     for i = 2:n
-        F = F + 100 * (x(i-1)^2 - x(i)^2)^2 + (x(i-1) - 1)^2;
+        F = F + 100 * (x(i-1)^2 - x(i))^2 + (x(i-1) - 1)^2;
     end
 end

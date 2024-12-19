@@ -11,7 +11,7 @@ function gradF = extended_rosenbrock_grad(x)
     % Check that input dimension is even
     % TODO correct?
     if mod(n, 2) ~= 0
-        error('Input dimension n must be even for the Extended Rosenbrock function.');
+        error('Input dimension n must be even for the Gradient of the Extended Rosenbrock function.');
     end
     
     % Preallocate gradient vector
@@ -24,6 +24,6 @@ function gradF = extended_rosenbrock_grad(x)
         gradF(i) = 200*x(i)*(x(i)^2 - x(i+1)) + (x(i) - 1);
         
         % Gradient w.r.t. x_{i+1} (even index)
-        gradF(i+1) = -100*(x(i-1)^2 - x(i));
+        gradF(i+1) = -100*(x(i)^2 - x(i+1));
     end
 end
