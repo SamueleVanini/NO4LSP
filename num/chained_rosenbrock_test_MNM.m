@@ -8,7 +8,7 @@ addpath('test_problems_for_unconstrained_optimization\');
 % Parameters
 rho = 0.7;        % Backtracking reduction factor
 c1 = 1e-2;        % Armijo condition parameter
-tolgrad = 1e-6;   % Gradient tolerance for stopping
+tolgrad = 1e-12;   % Gradient tolerance for stopping
 toleig = 1e-6;    % Tolerance for eigenvalue check
 btmax = 50;       % Maximum backtracking steps
 kmax = 5000;      % Maximum iterations
@@ -35,9 +35,12 @@ fprintf('Test Modified Newton Method on Chained Rosenbrock, n = %d\n', n);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
-    toleig, kmax, tolgrad, c1, rho, btmax);
+    kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
 
 % Display results
+fprintf('Final Point: [');
+fprintf('%f ', xk1(1:end-1));  % Print all elements except the last one
+fprintf('%f]\n', xk1(end));     % Print the last element and close the bracket
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);
 fprintf('Iterations: %d\n', k1);

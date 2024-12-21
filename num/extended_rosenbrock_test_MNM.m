@@ -31,13 +31,16 @@ gradf = @(x) extended_rosenbrock_grad(x);
 Hessf = @(x) extended_rosenbrock_hess(x);
 
 %% Test the Modified Newton's Method - Starting Point x_bar
-fprintf('Test Modified Newton Method on Chained Rosenbrock, n = %d\n', n);
+fprintf('Test Modified Newton Method on Extended Rosenbrock, n = %d\n', n);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
-    toleig, kmax, tolgrad, c1, rho, btmax);
+    kmax, tolgrad, c1, rho, btmax, 'levmar', toleig);
 
 % Display results
+fprintf('Final Point: [');
+fprintf('%f ', xk1(1:end-1));  % Print all elements except the last one
+fprintf('%f]\n', xk1(end));     % Print the last element and close the bracket
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);
 fprintf('Iterations: %d\n', k1);
