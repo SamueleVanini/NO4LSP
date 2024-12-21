@@ -21,13 +21,17 @@ while k < kmax && gradfk_norm >= tolgrad
     % Define Bk
     Bk = Hessf(xk);
 
-    % Check that Bk is sufficiently P.D. (eig() or Cholesky fact chol())
-    smallest_eig_k = eigs(Bk, 1, 'smallestreal'); % TODO choose the method for P.D. check
-    if smallest_eig_k < toleig
-        % apply Ek = tauk * I as in noted ()
-        tauk = max(0, toleig - smallest_eig_k);
-        Ek = tauk * eye(size(Bk));
-        Bk = Bk + Ek; % TODO try different hessian corrections
+    % Check positive definiteness using Cholesky
+    try
+        chol(Bk);   
+    catch
+        % Hessian is not positive definite
+        % TODO different approaches for correction: try them
+        opts = struct('issym', true, 'isreal', true); % Exploit properties of the Hessian
+        min_eig = eigs(Bk, 1, 'smallestreal', opts); % Compute smallest eigenvalue, opts will help the algorithm to converge
+        tauk = max(0, toleig - min_eig); % Compute correction
+        Bk = Bk + tauk * eye(n); %  Add correction
+        chol(Bk); % Retry with corrected Hessian, if it will not be P.D. it will raise an error
     end
     
     % Continue with the common newton method with backtracking

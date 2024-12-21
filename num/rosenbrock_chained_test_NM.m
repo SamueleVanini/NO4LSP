@@ -6,14 +6,14 @@ clc; clear; close all;
 addpath('test_problems_for_unconstrained_optimization\'); 
 
 % Parameters
-rho = 0.5;        % Backtracking reduction factor
-c1 = 1e-4;        % Armijo condition parameter
+rho = 0.7;        % Backtracking reduction factor
+c1 = 1e-2;        % Armijo condition parameter
 tolgrad = 1e-6;   % Gradient tolerance for stopping
 toleig = 1e-6;    % Tolerance for eigenvalue check
 btmax = 50;       % Maximum backtracking steps
-kmax = 1000;      % Maximum iterations
+kmax = 5000;      % Maximum iterations
 
-% Problem size 
+% Problem size
 n = 1e3; % 4, 5
 pattern = [-1.2; 1];
 n = n / size(pattern, 2);
@@ -32,7 +32,7 @@ gradf = @(x) chained_rosenbrock_grad(x);
 Hessf = @(x) chained_rosenbrock_hess(x);
 
 %% Test the Modified Newton's Method - Starting Point x_bar
-fprintf('Test Modified with starting point x_bar\n');
+fprintf('Test Modified Newton Method on Chained Rosenbrock with starting point x_bar\n');
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
     modifiedNM(x_bar, f, gradf, Hessf, ...
