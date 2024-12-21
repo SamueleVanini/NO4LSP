@@ -2,9 +2,6 @@
 % Clear the workspace and command window
 clc; clear; close all;
 
-% Add path to functions
-addpath('test_problems_for_unconstrained_optimization\'); 
-
 % Parameters
 rho = 0.5;        % Backtracking reduction factor
 c1 = 1e-4;        % Armijo condition parameter
@@ -18,6 +15,10 @@ x0_1 = [1.2; 1.2];
 x0_2 = [-1.2; 1];
 
 %% Define Rosenbrock Function, Gradient, and Hessian
+
+% Add path to functions
+addpath('test_problems_for_unconstrained_optimization\'); 
+
 % Function
 f = @(x) rosenbrock(x);
 

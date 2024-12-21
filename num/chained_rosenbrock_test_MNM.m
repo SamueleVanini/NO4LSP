@@ -2,9 +2,6 @@
 % Clear the workspace and command window
 clc; clear; close all;
 
-% Add path to functions
-addpath('test_problems_for_unconstrained_optimization\'); 
-
 % Parameters
 rho = 0.5;        % Backtracking reduction factor
 c1 = 1e-4;        % Armijo condition parameter
@@ -21,6 +18,10 @@ x_bar = [-1.2; 1];
 x0 = repmat(x_bar, n / size(x_bar, 1), 1);
 
 %% Define Rosenbrock Function, Gradient, and Hessian
+
+% Add path to functions
+addpath('test_problems_for_unconstrained_optimization\'); 
+
 % Function
 f = @(x) chained_rosenbrock(x);
 
@@ -33,7 +34,7 @@ Hessf = @(x) chained_rosenbrock_hess(x);
 %% Test the Modified Newton's Method - Starting Point x_bar
 fprintf('Test Modified Newton Method on Chained Rosenbrock, n = %d\n', n);
 
-[xk1, fk1, gradfk1, gradfk_norm1, k1, xseq1, btseq1] = ...
+[xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
     kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
 
