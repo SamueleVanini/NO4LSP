@@ -15,11 +15,10 @@ kmax = 5000;      % Maximum iterations
 
 % Problem size
 n = 1e3; % 4, 5
-pattern = [-1.2; 1];
-n = n / size(pattern, 2);
 
 % Starting points
-x_bar = repmat(pattern, n, 1);
+x_bar = [-1.2; 1];
+x0 = repmat(x_bar, n / size(x_bar, 1), 1);
 
 %% Define Rosenbrock Function, Gradient, and Hessian
 % Function
@@ -32,10 +31,10 @@ gradf = @(x) chained_rosenbrock_grad(x);
 Hessf = @(x) chained_rosenbrock_hess(x);
 
 %% Test the Modified Newton's Method - Starting Point x_bar
-fprintf('Test Modified Newton Method on Chained Rosenbrock with starting point x_bar\n');
+fprintf('Test Modified Newton Method on Chained Rosenbrock, n = %d\n', n);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
-    modifiedNM(x_bar, f, gradf, Hessf, ...
+    modifiedNM(x0, f, gradf, Hessf, ...
     toleig, kmax, tolgrad, c1, rho, btmax);
 
 % Display results
