@@ -34,7 +34,7 @@ fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
     modifiedNM(x0_1, f, gradf, Hessf, ...
     kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
 
-% Display results
+%% Display results
 fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);

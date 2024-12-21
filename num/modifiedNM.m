@@ -1,4 +1,4 @@
-    function [xk, fk, gradfk_norm, k, xseq, btseq] = ...
+    function [xk, fk, gradfk, gradfk_norm, k, xseq, btseq] = ...
         modifiedNM(x0, f, gradf, Hessf, ...
         kmax, tolgrad, c1, rho, btmax, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
@@ -29,10 +29,10 @@
     addpath('matrix_corrections\');
 
     % Define function handle for correction, based on the user choice
+    use_levmar_dyn = false;
     switch correction_technique
         case 'levmar'
             if ~isempty(correction_params)
-                use_levmar_dyn = false;
                 correction = @(X) levenberg_marquardt_correction(X, correction_params{:});
             else
                 use_levmar_dyn = true;
@@ -71,7 +71,6 @@
         catch % If it fails thenk Bk is not P.D.
             if use_levmar_dyn
                 correction = @(X) levenberg_marquardt_correction(X, gradfk);
-                disp('applied levmar dyn');
             end
             Bk = correction(Hessf(xk)); % Correct Bk using the choosen approach
             chol(Bk); % Retry cholesky, if not P.D. error will raise
