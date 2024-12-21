@@ -82,6 +82,7 @@ plot3(xseq2(1, :), xseq2(2, :), arrayfun(@(i) f(xseq2(:, i)), 1:size(xseq2, 2)),
       '-bx', 'LineWidth', 2);
 title('Surface Plot with Iterates');
 xlabel('x_1'); ylabel('x_2'); zlabel('f(x)');
+legend({'Function surface', 'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
 grid on; view(45, 30);
 
 % Contour plot
@@ -92,6 +93,7 @@ plot(xseq1(1, :), xseq1(2, :), '-rx', 'LineWidth', 2);
 plot(xseq2(1, :), xseq2(2, :), '-bx', 'LineWidth', 2);
 title('Contour Plot with Iterates');
 xlabel('x_1'); ylabel('x_2');
+legend({'Function contour lines', 'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
 grid on;
 
 %% Bar Plot for Backtracking Steps
