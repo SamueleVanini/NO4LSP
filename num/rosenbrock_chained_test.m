@@ -15,11 +15,11 @@ kmax = 1000;      % Maximum iterations
 
 % Problem size 
 n = 1e3; % 4, 5
-pattern = [-1.2, 1];
+pattern = [-1.2; 1];
 n = n / size(pattern, 2);
 
 % Starting points
-x_bar = repmat(pattern, 1, n);
+x_bar = repmat(pattern, n, 1);
 
 %% Define Rosenbrock Function, Gradient, and Hessian
 % Function
