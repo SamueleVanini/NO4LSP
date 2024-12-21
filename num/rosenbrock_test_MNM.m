@@ -31,7 +31,7 @@ Hessf = @(x) rosenbrock_hess(x);
 %% Test the Modified Newton's Method - Starting Point 1
 fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
 
-[xk1, fk1, gradfk_norm1, k1, xseq1, btseq1] = ...
+[xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(x0_1, f, gradf, Hessf, ...
     kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
 
@@ -45,9 +45,9 @@ fprintf('\n');
 %% Test the Modified Newton's Method - Starting Point 2
 fprintf('Test with starting point x0 = [%f, %f]\n', x0_2);
 
-[xk2, fk2, gradfk_norm2, k2, xseq2, btseq2] = ...
+[xk2, fk2, gradfk_norm2, k2, xseq2, btseq2, corrseq2] = ...
     modifiedNM(x0_2, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax, 'eye', toleig);
+    kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
 
 % Display results
 fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));

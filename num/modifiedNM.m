@@ -1,4 +1,4 @@
-    function [xk, fk, gradfk_norm, k, xseq, btseq] = ...
+    function [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = ...
         modifiedNM(x0, f, gradf, Hessf, ...
         kmax, tolgrad, c1, rho, btmax, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
@@ -52,6 +52,7 @@
     % Solution sequence tracking variable initialization
     xseq = zeros(length(x0), kmax);
     btseq = zeros(1, kmax);
+    corrseq = zeros(1, kmax);
     
     % Starting values initialization
     k = 0;
@@ -64,7 +65,8 @@
     while k < kmax && gradfk_norm >= tolgrad
 
         % Define Bk, correction of the Hessian, using the choosen approach
-        Bk = Hessf(xk);
+        Hk = Hessf(xk);
+        Bk = Hk;
 
         try % Attempt cholesky decomposition
             chol(Bk);
@@ -72,10 +74,10 @@
             if use_levmar_dyn
                 correction = @(X) levenberg_marquardt_correction(X, gradfk);
             end
-            Bk = correction(Hessf(xk)); % Correct Bk using the choosen approach
+            Bk = correction(Hk); % Correct Bk using the choosen approach
             chol(Bk); % Retry cholesky, if not P.D. error will raise
         end
-
+        
         % Continue with the common newton method with backtracking
         [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk);
 
@@ -131,6 +133,8 @@
         xseq(:, k) = xk;
         % Store bt iterations in btseq
         btseq(k) = bt;
+        % Store the correction applied
+        corrseq(k) = norm(Hk - Bk, 'fro');
     end
 
     % "Cut" xseq and btseq to the correct size
