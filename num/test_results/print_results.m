@@ -2,7 +2,7 @@ clear
 clc
 close all
 
-file = 'x0_extpowell_precon.mat';
+file = 'x0_extrosbrock_precond.mat';
 load(file);
 
 %% Set functions
@@ -11,9 +11,13 @@ addpath("..\test_problems_for_unconstrained_optimization\");
 % gradF = @rosenbrock_grad;
 % hessF = @rosenbrock_hess;
 
-f = @extended_powell_badly_scaled;
-gradF = @extended_powell_badly_scaled_grad;
-hessF = @extended_powell_badly_scaled_hess;
+% f = @extended_powell_badly_scaled;
+% gradF = @extended_powell_badly_scaled_grad;
+% hessF = @extended_powell_badly_scaled_hess;
+
+f = @extended_rosenbrock;
+gradF = @extended_rosenbrock_grad;
+hessF = @extended_rosenbrock_hess;
 
 %% Display results
 if failure 
