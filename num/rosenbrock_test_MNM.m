@@ -127,5 +127,13 @@ title('Modified Newton - Start [-1.2, 1]');
 xlabel('x_1'); ylabel('x_2');
 grid on;
 
+% 5. Plot non-zero corrections from corrseq1
+figure;
+stem(find(corrseq1 ~= 0), corrseq1(corrseq1 ~= 0), 'filled', 'LineWidth', 1.5);
+xlabel('Iteration');
+ylabel('Correction Value');
+title('Matrix Corrections Applied');
+grid on;
+
 %% End
 fprintf('Test Completed!\n');
