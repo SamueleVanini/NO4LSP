@@ -19,8 +19,11 @@ function F = extended_rosenbrock(x)
     % Compute function value
     for i = 1:2:n-1
         % Compute the two terms of the Rosenbrock function
-        f_odd = 10 * (x(i)^2 - x(i+1));
-        f_even = (x(i) - 1);
+        k = i; % always odd
+        f_odd = 10 * (x(k)^2 - x(k+1));
+
+        k = i+1; % always even
+        f_even = (x(k - 1) - 1);
         
         % Accumulate the result
         F = F + f_odd^2 + f_even^2;
