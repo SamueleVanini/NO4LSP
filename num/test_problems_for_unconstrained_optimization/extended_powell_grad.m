@@ -1,4 +1,4 @@
-function gradF = extended_powell_grad(x, alpha)
+function gradF = extended_powell_grad(x, alpha, beta, gamma)
     % EXTENDED_POWELL_GRAD Gradient of the Extended Powell function
     % Input:
     %   x     : n-dimensional vector (n must be even)
@@ -21,9 +21,11 @@ function gradF = extended_powell_grad(x, alpha)
     for i = 1:2:n-1
     
         % Odd indices
-        gradF(i) = 0.5 * (alpha * x(i+1) - exp(x(i)));
+        k = i;
+        gradF(k)   =  alpha^2*x(k)*x(k+1)^2 - alpha*beta*x(k+1) - exp(-2*x(k)) - exp(-x(k))*exp(-x(k+1)) + gamma*exp(-x(k));
     
         % Even indices
-        gradF(i+1) = 0.5 * (alpha * x(i) - exp(x(i+1)));
+        k = i+1;
+        gradF(k) = alpha^2*x(k)*x(k-1)^2 - alpha*beta*x(k-1) - exp(-2*x(k)) - exp(-x(k))*exp(-x(k-1)) + gamma*exp(-x(k));
     end
 end

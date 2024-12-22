@@ -2,11 +2,18 @@ clear
 clc
 close all
 
-file = 'x1_results.mat';
-% file = 'x2_results.mat';
-
-load('rosenbrock.mat');
+file = 'x0_extpowell_precon.mat';
 load(file);
+
+%% Set functions
+addpath("..\test_problems_for_unconstrained_optimization\");
+% f = @rosenbrock;
+% gradF = @rosenbrock_grad;
+% hessF = @rosenbrock_hess;
+
+f = @extended_powell_badly_scaled;
+gradF = @extended_powell_badly_scaled_grad;
+hessF = @extended_powell_badly_scaled_hess;
 
 %% Display results
 if failure 
@@ -20,6 +27,10 @@ disp(['Norm of the gradient: ', num2str(norm_grad_f_x)]);
 disp(['Done after ', num2str(iteration), '/', num2str(max_iter), ...
     ' iterations']);
 
+if do_precon 
+    disp('Applied preconditioning');
+end
+
 %% Plot results
 % -- Contour line --
 disp('Contour line');
@@ -29,7 +40,11 @@ y_dim = [min(x_seq(2, :)) - 1, max(x_seq(2, :)) + 1];
 
 [X, Y] = meshgrid(linspace(x_dim(1), x_dim(2), 1000), ...
     linspace(y_dim(1), y_dim(2), 1000));
-Z = reshape(ros_f([X(:),Y(:)]'),size(X));
+Z = zeros(1000000, 1);
+for i = 1:1000000
+    Z(i) = f([X(i); Y(i)]);
+end
+Z = reshape(Z, size(X));
 
 contour_fig = figure();
 contour(X, Y, Z);
@@ -48,9 +63,15 @@ surf_fig = figure();
 surf(X, Y, Z, 'EdgeColor', 'none');
 
 hold on
-plot3(x_seq(1, 1), x_seq(2, 1), ros_f(x_seq(:, 1)), 'ro');
+plot3(x_seq(1, 1), x_seq(2, 1), f(x_seq(:, 1)), 'ro');
 if size(x_seq, 2) > 1
-    plot3(x_seq(1, 1:2), x_seq(2, 1:2), ros_f(x_seq(:, 1:2)), 'r--');
-    plot3(x_seq(1, 2:end), x_seq(2, 2:end), ros_f(x_seq(:, 2:end)), 'r--x');
+    line = [f(x_seq(:, 1)), f(x_seq(:, 2))];
+    plot3(x_seq(1, 1:2), x_seq(2, 1:2), line, 'r--');
+
+    other_points = zeros(1, size(x_seq, 2) - 1);
+    for i = 1:size(x_seq, 2) - 1
+        other_points(i) = f(x_seq(:, i + 1));
+    end
+    plot3(x_seq(1, 2:end), x_seq(2, 2:end), other_points, 'r--x');
 end
 hold off

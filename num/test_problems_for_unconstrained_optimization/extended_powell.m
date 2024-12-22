@@ -21,12 +21,14 @@ function F = extended_powell(x, alpha, beta, gamma)
     
     % Compute the function value
     for i = 1:2:n-1
-        
-        % Case: i is odd
-        f_odd = alpha * x(i) * x(i+1) - beta;
+        % compute k = i and k = i + 1 at the same time
+        % k = i always odd
+        k = i;
+        f_odd = alpha * x(k) * x(k+1) - beta;
 
-        % Case: i is even
-        f_even = exp(-x(i-1)) + exp(-x(i)) - gamma;
+        % k = i + 1 always even
+        k = i+1;
+        f_even = exp(-x(k - 1)) + exp(-x(k)) - gamma;
         
         % Accumulate the result
         F = F + f_odd^2 + f_even^2;
