@@ -1,4 +1,4 @@
-function gradF = extended_powell_grad(x, alpha)
+function gradF = extended_powell_grad(x, alpha, beta, gamma)
     % EXTENDED_POWELL_GRAD Gradient of the Extended Powell function
     % Input:
     %   x     : n-dimensional vector (n must be even)

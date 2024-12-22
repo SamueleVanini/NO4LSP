@@ -1,4 +1,4 @@
-function HessF = extended_powell_hess(x, alpha)
+function HessF = extended_powell_hess(x, alpha, beta, gamma)
     % EXTENDED_POWELL_HESS Hessian of the Extended Powell function
     % Input:
     %   x     : n-dimensional vector (n must be even)

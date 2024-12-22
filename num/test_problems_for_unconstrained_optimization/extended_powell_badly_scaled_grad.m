@@ -8,7 +8,9 @@ function gradF = extended_powell_badly_scaled_grad(x)
    
     % Badly scaling parameter
     alpha   = 1e4;
+    beta    = 1;
+    gamma   = 1 + 1e-4;
     
     % Gradient evaluation
-    gradF = extended_powell_grad(x, alpha);
+    gradF = extended_powell_grad(x, alpha, beta, gamma);
 end

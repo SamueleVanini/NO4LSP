@@ -26,7 +26,7 @@ function F = extended_powell(x, alpha, beta, gamma)
         f_odd = alpha * x(i) * x(i+1) - beta;
 
         % Case: i is even
-        f_even = exp(-x(i-1)) + exp(-x(i)) - gamma;
+        f_even = exp(-x(i)) + exp(-x(i+1)) - gamma;
         
         % Accumulate the result
         F = F + f_odd^2 + f_even^2;
