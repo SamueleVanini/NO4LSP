@@ -5,17 +5,21 @@ clc; clear; close all;
 % Parameters
 rho = 0.7;        % Backtracking reduction factor
 c1 = 1e-2;        % Armijo condition parameter
-tolgrad = 1e-6;   % Gradient tolerance for stopping
-toleig = 1e-6;    % Tolerance for eigenvalue check
+tolgrad = 1e-8;   % Gradient tolerance for stopping
+toleig = 1e-8;    % Tolerance for eigenvalue check
 btmax = 50;       % Maximum backtracking steps
 kmax = 5000;      % Maximum iterations
 
-% Problem size
-n = 1e3; % 4, 5
+n = 1e3;                % Problem size [3, 4, 5]
+num_rand_points = 10;   % Number of random points to generate
 
 % Starting point
 x_bar = [0; 1];
 x0 = repmat(x_bar, n / size(x_bar, 1), 1);
+
+% Generate random points belonging to the hypercube
+random_points = 2 * rand(n, num_rand_points) - 1; % Uniformly distributed in [-1, 1] for each dimension
+random_points = random_points + x0; % Shift the center
 
 %% Define Rosenbrock Function, Gradient, and Hessian
 
