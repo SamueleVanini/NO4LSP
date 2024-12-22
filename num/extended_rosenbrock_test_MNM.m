@@ -81,7 +81,7 @@ figure;
 semilogy(1:k1+1, eigenvals, 'LineWidth', 2);
 xlabel('Iteration');
 ylabel('Eigenvalue');
-title('Single Eigenvalue of Hessian Across Iterations');
+title('Minimum Eigenvalue of Hessian Across Iterations');
 grid on;
 
 % 4. Trajectory projection (if n > 3, project onto the first 3 components)
