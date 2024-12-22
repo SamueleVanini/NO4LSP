@@ -2,8 +2,11 @@
 % Clear the workspace and command window
 clc; clear; close all;
 
+% Set the seed for random number generation
+rng(min([318684, 337728, 338137]));
+
 % Parameters
-rho = 0.5;        % Backtracking reduction factor
+rho = 0.7;        % Backtracking reduction factor
 c1 = 1e-4;        % Armijo condition parameter
 tolgrad = 1e-8;   % Gradient tolerance for stopping
 toleig = 1e-8;    % Tolerance for eigenvalue check

@@ -2,9 +2,12 @@
 % Clear the workspace and command window
 clc; clear; close all;
 
+% Set the seed for random number generation
+rng(min([318684, 337728, 338137]));
+
 % Parameters
 rho = 0.7;        % Backtracking reduction factor
-c1 = 1e-2;        % Armijo condition parameter
+c1 = 1e-4;        % Armijo condition parameter
 tolgrad = 1e-8;   % Gradient tolerance for stopping
 toleig = 1e-8;    % Tolerance for eigenvalue check
 btmax = 50;       % Maximum backtracking steps
@@ -36,7 +39,7 @@ gradf = @(x) extended_powell_badly_scaled_grad(x);
 Hessf = @(x) extended_powell_badly_scaled_hess(x);
 
 %% Test the Modified Newton's Method - Starting Point x_bar
-fprintf('Test Modified Newton Method on Extended Rosenbrock, n = %d\n', n);
+fprintf('Test Modified Newton Method on Extended Powell (badly scaled), n = %d\n', n);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
