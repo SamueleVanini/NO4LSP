@@ -3,12 +3,13 @@ clc; clear; close all;
 
 H = [1 -2; -2 1]; % Example non-positive definite matrix
 toleig = 1e-6; % Tolerance for eigenvalues
-delta=1e-6;
-lambda = 1.5;
+beta = 0.1; % Regularization parameter for modified LDL decomposition
+delta = 1e-6; % Regularization parameter for modified LDL decomposition
 
-Bk_diag = diagonal_loading_correction(H, toleig, 50000);
-Bk_nearest = nearest_PD_correction(H, toleig);
+Bk_diag = diagonal_loading_correction(H, toleig);
+Bk_tresh = eigenvalue_tresholding_correction(H, toleig);
 Bk_spectral = spectral_shifting_correction(H, toleig);
+Bk_modLDL = modified_ldl_correction(H, beta, delta);
 
 % Display the corrected matrices and their difference norms
 disp('Original H:');
@@ -21,11 +22,16 @@ display_and_check(H, Bk_diag);
 fprintf('\n\n');
 
 disp('Nearest Positive Definite Correction:');
-display_and_check(H, Bk_nearest);
+display_and_check(H, Bk_tresh);
 fprintf('\n\n');
 
 disp('Spectral Shifting Correction:');
 display_and_check(H, Bk_spectral);
+fprintf('\n\n');
+
+disp('Modified LDL Correction:');
+display_and_check(H, Bk_modLDL);
+fprintf('\n\n');
 
 function display_and_check(H, Bk)
     disp(Bk);

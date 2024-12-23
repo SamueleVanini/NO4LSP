@@ -30,6 +30,8 @@
 
     % Define function handle for correction, based on the user choice
     switch correction_technique
+        case 'modLDL'
+            correction = @(X) modified_ldl_correction(X, correction_params{:});
         case 'tresh'
             correction = @(X) eigenvalue_tresholding_correction(X, correction_params{:});
         case 'diag'
