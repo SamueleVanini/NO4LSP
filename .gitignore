@@ -1,0 +1,6 @@
+# Project specific ignore
+.vscode/
+
+# Python general ignore
+.venv
+__pycache__
