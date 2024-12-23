@@ -1,6 +1,7 @@
     function [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = ...
-        modifiedNM(x0, f, gradf, Hessf, ...
-        kmax, tolgrad, c1, rho, btmax, correction_technique, varargin)
+        modifiedNM(...
+        x0, f, gradf, Hessf, kmax, ...
+        tolgrad, c1, rho, btmax, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
     % 
     % The function expects the following correction parameters to be passed via varargin:
@@ -21,6 +22,11 @@
     %
     % Example usage:
     %   [xk, fk, gradfk_norm, k, xseq, btseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'nearPD', 1e-6);
+    
+    % Default correction technique is 'spectral'
+    if nargin < 10
+        correction_technique = 'spectral';
+    end
 
     % Parse additional parameters from varargin
     correction_params = varargin;

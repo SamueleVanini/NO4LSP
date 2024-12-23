@@ -8,7 +8,9 @@ function [Bk] = modified_ldl_correction(Hk, beta, delta)
         delta = 1e-6;
     end
 
+    % Perform the modified LDL decomposition
     [L, D] = modLDL(Hk, beta, delta);
+    % Recreate the corrected matrix
     Bk = L * D * L';
 
 end

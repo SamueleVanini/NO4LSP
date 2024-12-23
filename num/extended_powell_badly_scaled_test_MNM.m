@@ -9,7 +9,6 @@ rng(min([318684, 337728, 338137]));
 rho = 0.7;        % Backtracking reduction factor
 c1 = 1e-4;        % Armijo condition parameter
 tolgrad = 1e-8;   % Gradient tolerance for stopping
-toleig = 1e-8;    % Tolerance for eigenvalue check
 btmax = 50;       % Maximum backtracking steps
 kmax = 5000;      % Maximum iterations
 
@@ -43,7 +42,7 @@ fprintf('Test Modified Newton Method on Extended Powell (badly scaled), n = %d\n
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax, 'levmar');
+    kmax, tolgrad, c1, rho, btmax, 'spectral');
 
 %% Display results
 fprintf('Final Point: [');

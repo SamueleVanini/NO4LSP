@@ -6,7 +6,6 @@ clc; clear; close all;
 rho = 0.5;        % Backtracking reduction factor
 c1 = 1e-4;        % Armijo condition parameter
 tolgrad = 1e-6;   % Gradient tolerance for stopping
-toleig = 1e-6;    % Tolerance for eigenvalue check
 btmax = 50;       % Maximum backtracking steps
 kmax = 1000;      % Maximum iterations
 
@@ -33,7 +32,7 @@ fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(x0_1, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
+    kmax, tolgrad, c1, rho, btmax, 'spectral');
 
 %% Display results
 fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));
@@ -47,7 +46,7 @@ fprintf('Test with starting point x0 = [%f, %f]\n', x0_2);
 
 [xk2, fk2, gradfk_norm2, k2, xseq2, btseq2, corrseq2] = ...
     modifiedNM(x0_2, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax, 'spectral', toleig);
+    kmax, tolgrad, c1, rho, btmax, 'spectral');
 
 % Display results
 fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));
