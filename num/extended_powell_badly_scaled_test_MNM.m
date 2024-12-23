@@ -47,8 +47,10 @@ fprintf('Test Modified Newton Method on Extended Powell (badly scaled), n = %d\n
 
 %% Display results
 fprintf('Final Point: [');
-fprintf('%f ', xk1(1:end-1));  % Print all elements except the last one
-fprintf('%f]\n', xk1(end));     % Print the last element and close the bracket
+fprintf('%f ', xk1(1:5));  % Print first 5 elements
+fprintf('... ');
+fprintf('%f ', xk1(end-4:end-1));  % Print last 4 elements
+fprintf('%f]\n', xk1(end));  % Print the last element and close the bracket
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);
 fprintf('Iterations: %d\n', k1);
