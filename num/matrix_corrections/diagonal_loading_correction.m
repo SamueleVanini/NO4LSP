@@ -1,5 +1,13 @@
 function Bk = diagonal_loading_correction(Hk, toleig, maxit)
     
+    % Set default values for toleig and maxit
+    if nargin < 2
+        toleig = 1e-8;
+    end
+    if nargin < 3
+        maxit = 100;
+    end
+
     t = 0;
     tauk = 0; % Start with no correction
     while t < maxit

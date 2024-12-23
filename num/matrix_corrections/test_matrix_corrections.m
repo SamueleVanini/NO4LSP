@@ -9,7 +9,6 @@ lambda = 1.5;
 Bk_diag = diagonal_loading_correction(H, toleig, 50000);
 Bk_nearest = nearest_PD_correction(H, toleig);
 Bk_spectral = spectral_shifting_correction(H, toleig);
-Bk_lm = levenberg_marquardt_correction(H, lambda);
 
 % Display the corrected matrices and their difference norms
 disp('Original H:');
@@ -27,9 +26,6 @@ fprintf('\n\n');
 
 disp('Spectral Shifting Correction:');
 display_and_check(H, Bk_spectral);
-
-disp('Levenberg-Marquardt Correction:');
-display_and_check(H, Bk_lm);
 
 function display_and_check(H, Bk)
     disp(Bk);

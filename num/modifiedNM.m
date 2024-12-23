@@ -20,7 +20,7 @@
     %   - toleig: tolerance for the correction
     %
     % Example usage:
-%   [xk, fk, gradfk_norm, k, xseq, btseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'nearPD', 1e-6);
+    %   [xk, fk, gradfk_norm, k, xseq, btseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'nearPD', 1e-6);
 
     % Parse additional parameters from varargin
     correction_params = varargin;
@@ -29,20 +29,15 @@
     addpath('matrix_corrections\');
 
     % Define function handle for correction, based on the user choice
-    use_levmar_dyn = false;
     switch correction_technique
-        case 'levmar'
-            if ~isempty(correction_params)
-                correction = @(X) levenberg_marquardt_correction(X, correction_params{:});
-            else
-                use_levmar_dyn = true;
-            end
-        case 'nearPD'
-            correction = @(X) nearest_PD_correction(X, correction_params{:});
+        case 'tresh'
+            correction = @(X) eigenvalue_tresholding_correction(X, correction_params{:});
         case 'diag'
             correction = @(X) diagonal_loading_correction(X, correction_params{:});
-        otherwise
+        case 'spectral'
             correction = @(X) spectral_shifting_correction(X, correction_params{:});
+        otherwise
+            error('Unknown correction technique: %s', correction_technique);
     end
 
     % Function handle for the armijo condition
@@ -71,9 +66,6 @@
         try % Attempt cholesky decomposition
             chol(Bk);
         catch % If it fails thenk Bk is not P.D.
-            if use_levmar_dyn
-                correction = @(X) levenberg_marquardt_correction(X, gradfk);
-            end
             Bk = correction(Hk); % Correct Bk using the choosen approach
             chol(Bk); % Retry cholesky, if not P.D. error will raise
         end
