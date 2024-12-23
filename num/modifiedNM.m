@@ -13,7 +13,7 @@
     %
     % For 'levmar' correction:+
     %   - lambda: a fixed arbitrary lambda
-    %   *OR*
+    %   OR
     %   - None: for dynamically define lambda
     %
     % For 'spectral' correction (default):
