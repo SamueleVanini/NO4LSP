@@ -97,14 +97,6 @@ while i < max_iteration && ...          % iteration
     % return a descent direction, even if matrix A is not SPD
     [desc_dir, pcg_flag, res, pcg_iter, ~] = ...
         pcg(A, -grad_f_xk, pcg_tol, pcg_maxit, precond, precond', -grad_f_xk);
-    
-    % Check for pcg failure
-    if pcg_flag == 1
-        failure = 1;
-        flag = sprintf("Failure: pcg did %d iteration but did not converge." + ...
-            " resrel = %.3g", pcg_iter, res);
-        break
-    end
 
     %% -- Backtracking --
     alpha = 1; % this ensure quadratic convergence in the long run
