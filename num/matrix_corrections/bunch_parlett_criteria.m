@@ -15,8 +15,9 @@ function [E] = bunch_parlett_criteria(A, growth_threshold)
      [offd, linear_index] = max(abs(triu(A, 1)), [], 'all');
      [i, j] = ind2sub(size(A), linear_index); % Convert linear index to subscripts
  
+     %? TODO: what does it mean to the ratio to be acceptabe, < or > ? 
      % Decide on the pivot block
-     if dia / offd <= growth_threshold
+     if dia / offd >= growth_threshold
          % Select the diagonal element as a 1x1 pivot block
          E = A(dia_index, dia_index);
      else
