@@ -8,7 +8,13 @@ A = [ 1,  2,  3,  4,  5;
 
 A = round(0.5 * (A + A'));
 
-P = block_to_upper_left(A, 3, 5);
+A = [ 4, 2, 1;
+      2, 5, 3;
+      1, 3, 6];
+
+i = 3; j = 3;
+
+P = block_to_upper_left_permutation(A, i, j);
 
 disp(A);
 disp(P * A * P');

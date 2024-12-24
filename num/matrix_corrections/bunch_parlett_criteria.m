@@ -16,7 +16,7 @@ function [E, i, j] = bunch_parlett_criteria(A, growth_threshold)
      [offd, offd_linear_index] = max(abs(triu(A, 1)), [], 'all');
      [offd_index_i, offd_index_j] = ind2sub(size(A), offd_linear_index); % Convert linear index to subscripts
  
-     %? TODO: what does it mean to the ratio to be acceptabe, < or > ? 
+     % Note: For A being 1x1 the offd is 0, so the ratio is dia/0 = inf, therefore the if condition will return true, this is coherent since if it were false we would try to select the 2x2 submatrix as the pivot block, which is not possible since A is 1x1
      % Decide on the pivot block
      if dia / offd >= growth_threshold
          % Select the diagonal element as a 1x1 pivot block

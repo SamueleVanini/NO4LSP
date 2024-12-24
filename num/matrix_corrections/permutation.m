@@ -20,9 +20,10 @@ function P = permutation(A, i, ii, j, jj)
         error('Invalid column permutation index');
     end
 
-    if nargin == 3
-        j = i;
-        jj = ii;
+    if i == j && ii == jj
+        P = eye(size(A));
+        P([i, ii], :) = P([ii, i], :);
+        return;
     end
 
     Pi = row_permutation(A, i, ii);
