@@ -43,7 +43,7 @@ function [L, B, P, E] = lbl(A)
     % Perform block factorization on the rearranged matrix
     [L, B, C, H] = block_factorization(P * A * P', E);
     % Perform the LBL factorization
-    S = H - C * inv(E) * C'; % Schur complement
+    S = H - C * inv(E) * C'; % Schur complement %! TODO avoid inv
 
     % Perform the LBL factorization on the Schur complement, recursively
     [~, ~, Ps, Es] = lbl(S);
