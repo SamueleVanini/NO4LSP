@@ -35,7 +35,6 @@ function [L, D] = modLDL(A, beta, delta)
         C(j,j) = cjj;
 
         % Correction for D(j,j)
-        
         thetaj  = max(max(abs(tril(C, -1))));
         D(j, j) = max([abs(cjj), (thetaj/beta)^2, delta]);
 
