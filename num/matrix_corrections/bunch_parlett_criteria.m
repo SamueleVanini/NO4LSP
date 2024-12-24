@@ -1,5 +1,6 @@
 function [E, i, j] = bunch_parlett_criteria(A, growth_threshold)
 
+    %? TODO: what default value should be used for growth_threshold?
     if nargin < 2
         growth_threshold = .5;
     end

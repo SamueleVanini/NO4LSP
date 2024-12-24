@@ -5,7 +5,7 @@ function Bk = diagonal_loading_correction(Hk, toleig, maxit)
         toleig = 1e-8;
     end
     if nargin < 3
-        maxit = 100;
+        maxit = 500;
     end
 
     t = 0;
