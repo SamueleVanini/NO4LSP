@@ -1,5 +1,7 @@
 clc; clear; close all;
 
+%! TODO Also try LDL matlab factorization, it should apply the bunch kaufman criteria 
+
 tol = 1e-8;
 
 % Define matrices
