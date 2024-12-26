@@ -1,13 +1,20 @@
 clc; clear; close all;
 
-%! TODO Also try LDL matlab factorization, it should apply the bunch kaufman criteria 
-
 tol = 1e-8;
 
 % Define matrices
 matrixList = {
-    [4, 1, 2; 1, 3, 0; 2, 0, 1], ...
-    [4, 1, 2, 3; 1, 3, 0, 1; 2, 0, 1, 2; 3, 1, 2, 4], ...
+    [
+        4, 1, 2; 
+        1, 3, 0; 
+        2, 0, 1
+    ], ...
+    [
+        4, 1, 2, 3; 
+        1, 3, 0, 1; 
+        2, 0, 1, 2; 
+        3, 1, 2, 4
+    ], ...
     eye(4), ...
     diag([1, 2, 3, 4]), ...
 };

@@ -9,6 +9,7 @@ function [Bk] = inertia_correction(Hk, toleig)
 
     % Compute LBL decomposition
     [L, B, P] = lbl(Hk); % Compute LBL decomposition
+    
     % Compute eigenvalues and eigenvectors
     [V, D] = eigs(B);
 
