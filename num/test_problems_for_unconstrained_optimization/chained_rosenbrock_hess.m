@@ -8,24 +8,15 @@ function HessF = chained_rosenbrock_hess(x)
     % Dimension of input vector
     n = length(x);
     
-    % Preallocate Hessian matrix
-    HessF = zeros(n, n);
+    % Initialize the diagonals vector
+    main_diag = 200*ones(n, 1);
+    off_diag = zeros(n - 1, 1);
 
-    % Diagonal elements (i = j), i = n excluded
     for i = 1:n-1
-        HessF(i, i) = 1200 * x(i)^2 - 400 * x(i+1) + 202;
+        main_diag(i) = 1200*x(i)^2 - 400*x(i+1) + 202;
+        off_diag(i) = -400*x(i);
     end
-    
-    % Diagonal (n, n) element 
-    HessF(n, n) = 200;
 
-    % Off-diagonal elements (symm. tri-diagonal)
-    for i = 1:n-1
-        % Precompute useful terms
-        temp = -400 * x(i);
-        
-        % Insert in diagonals
-        HessF(i, i+1) = temp;
-        HessF(i+1, i) = temp;
-    end
+    Bin = [[off_diag; 0], main_diag, [0; off_diag]];
+    HessF = spdiags(Bin, [-1 0 1], n, n);
 end
