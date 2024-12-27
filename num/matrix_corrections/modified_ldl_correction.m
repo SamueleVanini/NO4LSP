@@ -8,6 +8,9 @@ function [Bk] = modified_ldl_correction(Hk, beta, delta)
         delta = 1e-6;
     end
 
+    % Add the path to the modLDL function
+    addpath(fullfile(pwd, 'matrix_corrections/modLDL'));
+
     % Perform the modified LDL decomposition
     [L, D] = modLDL(Hk, beta, delta);
     % Recreate the corrected matrix

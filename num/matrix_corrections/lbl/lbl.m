@@ -34,8 +34,12 @@ function [L, B, P, E] = lbl(A)
         error('Matrix is not symmetric');
     end
 
+    addpath(fullfile(pwd, 'matrix_corrections/lbl'));
+
     % Extract the E block according to the Bunch-Parlett criteria
     [E, perm_i, perm_j] = bunch_parlett_criteria(A);
+
+    addpath(fullfile(pwd, 'matrix_corrections/permutations'));
 
     % Compute the permutation that will move the largest block on the top left
     P = block_to_upper_left_permutation(A, perm_i, perm_j);
@@ -43,7 +47,7 @@ function [L, B, P, E] = lbl(A)
     % Perform block factorization on the rearranged matrix
     [L, B, C, H] = block_factorization(P * A * P', E);
     % Perform the LBL factorization
-    S = H - C * inv(E) * C'; % Schur complement %! TODO avoid inv
+    S = H - C * inv(E) * C'; % Schur complement % TODO avoid inv
 
     % Perform the LBL factorization on the Schur complement, recursively
     [~, ~, Ps, Es] = lbl(S);

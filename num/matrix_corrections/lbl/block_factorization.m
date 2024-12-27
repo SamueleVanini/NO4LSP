@@ -20,6 +20,7 @@ function [L, B, C, H] = block_factorization(A, E)
     C = A(p+1:end, 1:p);
     H = A(p+1:end, p+1:end);
 
+    % TODO: Optimize inverse computation
     L11 = eye(p);
     L12 = zeros(p, m-p);
     L21 = C * inv(E);
