@@ -71,15 +71,15 @@
     % Stop when stopping criteria is met
     while k < kmax && gradfk_norm >= tolgrad
 
-        % Define Bk, correction of the Hessian, using the choosen approach
+        % Compute Hessian (sparse)
         Hk = Hessf(xk);
 
         try
             Bk = Hk;
             R = ichol(Bk); % Attempt (incomplete) Cholesky factorization, if not P.D. error will raise
         catch
-            % If it fails then Bk is not P.D.
-            Bk = correction(Hk); % Correct Bk using the chosen approach (will preserve sparsity)
+            % If it fails again then Bk is not P.D.
+            Bk = correction(Hk); % Correct Bk using the choosen approach (will preserve sparsity)
             R = ichol(Bk); % Retry Cholesky, if still not P.D. error will raise
         end
 
