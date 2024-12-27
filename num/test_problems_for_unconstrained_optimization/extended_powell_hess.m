@@ -25,8 +25,11 @@ function HessF = extended_powell_hess(x, alpha, beta, gamma)
         HessF(i+1, i+1) = (alpha*x(i))^2 + 2*exp(-2*x(i+1)) + exp(-x(i+1))*(exp(-x(i))-gamma); % Even (i+1)
         
         % Off-diagonal elements (symm. tri-diagonal) Note: temp is off-diag of i, off-diag of i+1 is 0
-        temp = 2*alpha^2*x(i)*x(i+1) - alpha*beta + exp(-x(i))*exp(-x(i+1));
+        % temp = 2*alpha^2*x(i)*x(i+1) - alpha*beta + exp(-x(i))*exp(-x(i+1));
+        
+        temp = 2*x(i)*x(i+1)*alpha^2 - alpha*beta + exp(-x(i) - x(i+1));
         HessF(i+1, i) = temp;
         HessF(i, i+1) = temp;
     end
+    HessF = sparse(HessF);
 end

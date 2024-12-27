@@ -79,6 +79,7 @@
         end
         
         % Continue with the common newton method with backtracking
+        %! TODO confront the use of preconditioning
         [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk);
 
         % Reset the value of alpha
