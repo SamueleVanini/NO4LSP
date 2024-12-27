@@ -2,10 +2,9 @@
 - [ ] Implementazione correzioni e nuove funzioni, in base all'email della prof
     - Per le correzioni, le trovi a pag 50 (75 nel pdf), con appendice della fattorizazione LBL a p.610 (630 nel pdf)
 - [ ] Chained non raggiunge il minimo per una coordinata: tuning? O scelta di un x_start diverso?
-- [ ] Mergiare codice mio e di giovi
 - [ ] Testare X_start diversi e approssimazioni delle derivate
+    - Random points non funzionano, vedi codice di giovi    
+    - Hessiane approssimate non funzionano, ma in teoria possiamo non farle (c'è scritto "if possible" nel testo)
+- [ ] Mergiare codice mio e di giovi
 - [ ] Ricontrollino risultati
-- [X] Dividere il codice in cartelle e sottocartelle, aggiungere gli addpath relativi
-- [ ] Random points non funzionano, vedi codice di giovi
-- [ ] Hessiane approssimate non funzionano, ma in teoria possiamo non farle (c'è scritto "if possible" nel testo)
 - [ ] Report e slides di stoc
