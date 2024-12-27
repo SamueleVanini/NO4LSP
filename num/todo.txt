@@ -5,5 +5,5 @@
 - [ ] Mergiare codice mio e di giovi
 - [ ] Testare X_start diversi e approssimazioni delle derivate
 - [ ] Ricontrollino risultati
-- [ ] Dividere il codice in cartelle e sottocartelle, aggiungere gli addpath relativi
+- [X] Dividere il codice in cartelle e sottocartelle, aggiungere gli addpath relativi
 - [ ] Report
