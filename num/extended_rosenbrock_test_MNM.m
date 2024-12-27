@@ -11,6 +11,7 @@ c1 = 1e-4;        % Armijo condition parameter
 tolgrad = 1e-8;   % Gradient tolerance for stopping
 btmax = 50;       % Maximum backtracking steps
 kmax = 5000;      % Maximum iterations
+h = 1e-6;         % Step size for finite difference
 
 n = 1e3;                % Problem size [3, 4, 5]
 num_rand_points = 10;   % Number of random points to generate
@@ -42,7 +43,7 @@ fprintf('Test Modified Newton Method on Extended Rosenbrock, n = %d\n', n);
 
 tic;
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
-    modifiedNM(x0, f, gradf, Hessf, ...
+    modifiedNM(x0, f, [], [], h, ...
     kmax, tolgrad, c1, rho, btmax, true, 'spectral');
 tictoc = toc;
 

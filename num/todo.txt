@@ -6,4 +6,6 @@
 - [ ] Testare X_start diversi e approssimazioni delle derivate
 - [ ] Ricontrollino risultati
 - [X] Dividere il codice in cartelle e sottocartelle, aggiungere gli addpath relativi
-- [ ] Report
+- [ ] Random points non funzionano, vedi codice di giovi
+- [ ] Hessiane approssimate non funzionano, ma in teoria possiamo non farle (c'è scritto "if possible" nel testo)
+- [ ] Report e slides di stoc

@@ -1,6 +1,6 @@
     function [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = ...
         modifiedNM(...
-        x0, f, gradf, Hessf, kmax, ...
+        x0, f, gradf, Hessf, h, kmax, ...
         tolgrad, c1, rho, btmax, precond, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
     %
@@ -23,12 +23,17 @@
     % Example usage:
     %   [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'modLDL', 1e-6);
     
-    % Default correction technique is 'spectral'
-    if nargin < 10
+    if isempty(h)
+        h = 1e-4;
+    end
+
+    % Default behaviour is preconditioning
+    if nargin < 10 || isempty(precond)
         precond = true;
     end
     
-    if nargin < 11
+    % Default correction technique is 'spectral'
+    if nargin < 11 || isempty(correction_technique)
         correction_technique = 'spectral';
     end
 
@@ -50,6 +55,16 @@
             correction = @(X) spectral_shifting_correction(X, correction_params{:});
         otherwise
             error('Unknown correction technique: %s', correction_technique);
+    end
+
+    if ~isa(gradf, 'function_handle') && isempty(gradf)
+        addpath(fullfile(pwd, 'finite_differences/'));
+        gradf = @(x) grad_approx(f, x, h);
+    end
+
+    if ~isa(Hessf, 'function_handle') && isempty(Hessf)
+        addpath(fullfile(pwd, 'finite_differences/'));
+        Hessf = @(x) hess_3d_approx(f, x, h);
     end
 
     % Function handle for the armijo condition
