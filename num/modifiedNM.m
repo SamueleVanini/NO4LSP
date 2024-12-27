@@ -3,25 +3,25 @@
         x0, f, gradf, Hessf, kmax, ...
         tolgrad, c1, rho, btmax, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
-    % 
+    %
     % The function expects the following correction parameters to be passed via varargin:
-    % For 'nearPD' correction:
+    %
+    % For 'spectral' correction (recomended):
     %   - toleig: tolerance for the correction
+    %
+    % For 'tresh' correction:
+    %   - toleig: tolerance for the correction
+    %   - maxit:  maximum iterations allowed for the correction
     %
     % For 'diag' correction:
     %   - toleig: tolerance for the correction
     %   - maxit:  maximum iterations allowed for the correction
     %
-    % For 'levmar' correction:+
-    %   - lambda: a fixed arbitrary lambda
-    %   OR
-    %   - None: for dynamically define lambda
-    %
-    % For 'spectral' correction (default):
+    % For 'modLDL' correction:
     %   - toleig: tolerance for the correction
     %
     % Example usage:
-    %   [xk, fk, gradfk_norm, k, xseq, btseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'nearPD', 1e-6);
+    %   [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'modLDL', 1e-6);
     
     % Default correction technique is 'spectral'
     if nargin < 10
