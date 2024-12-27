@@ -1,6 +1,6 @@
 function Bk = eigenvalue_tresholding_correction(Hk, toleig)
     
-    if nargin < 2 % Set default value for toleig
+    if nargin < 2 || isempty(toleig) % Set default value for toleig
         toleig = 1e-8;
     end
 
@@ -11,4 +11,8 @@ function Bk = eigenvalue_tresholding_correction(Hk, toleig)
     [V, D] = eig(Hk); % Compute eigendecomposition
     D(D < toleig) = toleig; % Replace negative eigenvalues with threshold
     Bk = V * D * V'; % Reconstruct positive definite matrix
+
+    if issparse(Hk) % Preserve sparsity
+        Bk = sparse(Bk);
+    end
 end

@@ -32,7 +32,7 @@ fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
 
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(x0_1, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax, 'spectral');
+    kmax, tolgrad, c1, rho, btmax);
 
 %% Display results
 fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));

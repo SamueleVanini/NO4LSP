@@ -14,4 +14,5 @@ function H = rosenbrock_hess(x)
     H22 = 200;
     
     H = [H11, H12; H21, H22];
+    H = sparse(H);
 end

@@ -1,7 +1,7 @@
     function [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = ...
         modifiedNM(...
         x0, f, gradf, Hessf, kmax, ...
-        tolgrad, c1, rho, btmax, correction_technique, varargin)
+        tolgrad, c1, rho, btmax, precond, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
     %
     % The function expects the following correction parameters to be passed via varargin:
@@ -25,6 +25,10 @@
     
     % Default correction technique is 'spectral'
     if nargin < 10
+        precond = true;
+    end
+    
+    if nargin < 11
         correction_technique = 'spectral';
     end
 
@@ -32,7 +36,7 @@
     correction_params = varargin;
 
     % Import all various matrix corrections
-    addpath('matrix_corrections\');
+    addpath(fullfile(pwd, 'matrix_corrections/'));
 
     % Define function handle for correction, based on the user choice
     switch correction_technique
@@ -69,18 +73,24 @@
 
         % Define Bk, correction of the Hessian, using the choosen approach
         Hk = Hessf(xk);
-        Bk = Hk;
 
-        try % Attempt cholesky decomposition
-            chol(Bk);
-        catch % If it fails thenk Bk is not P.D.
-            Bk = correction(Hk); % Correct Bk using the choosen approach
-            chol(Bk); % Retry cholesky, if not P.D. error will raise
+        try
+            Bk = Hk;
+            R = ichol(Bk); % Attempt (incomplete) Cholesky factorization, if not P.D. error will raise
+        catch
+            % If it fails then Bk is not P.D.
+            Bk = correction(Hk); % Correct Bk using the chosen approach (will preserve sparsity)
+            R = ichol(Bk); % Retry Cholesky, if still not P.D. error will raise
         end
-        
-        % Continue with the common newton method with backtracking
-        %! TODO confront the use of preconditioning
-        [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk);
+
+        if precond
+            P = R' * R; % Use the Cholesky factor R computed above as a preconditioner
+        else
+            P = []; % If no precodition is required, ignore it
+        end
+
+        % Continue with the common Newton method with backtracking
+        [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk, [], [], P);
 
         % Reset the value of alpha
         alpha = 1;

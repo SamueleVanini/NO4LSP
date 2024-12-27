@@ -1,10 +1,10 @@
 function Bk = diagonal_loading_correction(Hk, toleig, maxit)
     
     % Set default values for toleig and maxit
-    if nargin < 2
+    if nargin < 2 || isempty(toleig)
         toleig = 1e-8;
     end
-    if nargin < 3
+    if nargin < 3 || isempty(maxit)
         maxit = 500;
     end
 
@@ -23,4 +23,8 @@ function Bk = diagonal_loading_correction(Hk, toleig, maxit)
 
     % Apply the final corrected Bk
     Bk = Hk + tauk * eye(size(Hk));
+
+    if issparse(Hk) % Preserve sparsity
+        Bk = sparse(Bk);
+    end
 end

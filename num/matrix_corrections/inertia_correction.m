@@ -1,5 +1,9 @@
 function [Bk] = inertia_correction(Hk, toleig)
     
+    if nargin < 2 || isempty(toleig)
+        toleig = 1e-8;
+    end
+
     if ~ishermitian(Hk) % Check if matrix is symmetric
         error('Matrix is not symmetric');
     end
@@ -29,4 +33,7 @@ function [Bk] = inertia_correction(Hk, toleig)
     % Compute corrected matrix
     Bk = P' * (L * (B + F) * L') * P;
 
+    if issparse(Hk) % Preserve sparsity
+        Bk = sparse(Bk);
+    end
 end

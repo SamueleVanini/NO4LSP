@@ -40,9 +40,11 @@ Hessf = @(x) chained_rosenbrock_hess(x);
 %% Test the Modified Newton's Method - Starting Point x_bar
 fprintf('Test Modified Newton Method on Chained Rosenbrock, n = %d\n', n);
 
+tic;
 [xk1, fk1, gradfk_norm1, k1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(x0, f, gradf, Hessf, ...
-    kmax, tolgrad, c1, rho, btmax, 'spectral');
+    kmax, tolgrad, c1, rho, btmax, true, 'spectral');
+tictoc = toc;
 
 %% Display results
 fprintf('Final Point: [');
@@ -53,6 +55,7 @@ fprintf('%f]\n', xk1(end));  % Print the last element and close the bracket
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);
 fprintf('Iterations: %d\n', k1);
+fprintf('Time for convergence to solution: %f seconds', tictoc);
 fprintf('\n');
 
 %% Prepare data for plotting
