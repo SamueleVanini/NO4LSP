@@ -33,3 +33,13 @@ for n = problem_dim
     file_name = sprintf("%d-dim_ExtPow.mat", n);
     save(file_name, "x_0", "all_x");
 end
+
+%% Problem 82
+for n = problem_dim
+    x_0 = 0.5*ones(n, 1);
+
+    all_x = create_points(seed, x_0);
+
+    file_name = sprintf("%d-dim_Prob82.mat", n);
+    save(file_name, "x_0", "all_x");
+end
