@@ -1,9 +1,9 @@
-function HessF = problem_83_hess(x)
-%PROBLEM_83_HESS Hessian of the Problem 83 function
+function HessF = problem_82_hess(x)
+%PROBLEM_82_HESS Hessian of the Problem 82 function
 % Input:
 %   x : n-dimensional vector
 % Output:
-%   HessF : (n x n) Hessian matrix (diagonal)
+%   HessF : (n x n) Hessian matrix (tri-diagonal)
 
 n = length(x);
 cos_x = cos(x);
