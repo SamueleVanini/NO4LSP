@@ -4,9 +4,9 @@ close all
 
 %% Set Function
 addpath("test_problems_for_unconstrained_optimization\");
-f = @chained_rosenbrock;
-gradF = @chained_rosenbrock_grad;
-hessF = @chained_rosenbrock_hess;
+% f = @chained_rosenbrock;
+% gradF = @chained_rosenbrock_grad;
+% hessF = @chained_rosenbrock_hess;
 
 % f = @extended_powell_badly_scaled;
 % gradF = @extended_powell_badly_scaled_grad;
@@ -16,9 +16,13 @@ hessF = @chained_rosenbrock_hess;
 % gradF = @extended_rosenbrock_grad;
 % hessF = @extended_rosenbrock_hess;
 
+f = @problem_82;
+gradF = @problem_82_grad;
+hessF = @problem_82_hess;
+
 %% Variables Initialization
 % TNM
-x_init = [-1.2; 1];    % change here
+x_init = [.5; 0.5];    % change here
 max_iter = 1000;
 tollerance = 1e-8;
 
@@ -37,7 +41,7 @@ do_precon = false;
     rho, max_backtrack, do_precon);
 
 %% Save results
-file_name = "x0_chainrosbrock.mat";  % change here
+file_name = "x0_prob82.mat";  % change here
 
 complete_name = sprintf("test_results/%s", file_name);
 save(complete_name, "x_init", "x_found", "f_x", "norm_grad_f_x", ...
