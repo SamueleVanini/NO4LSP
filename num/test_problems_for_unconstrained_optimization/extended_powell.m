@@ -1,13 +1,15 @@
-function F = extended_powell(x, alpha, beta, gamma)
+function F = extended_powell(x)
     % EXTENDED_POWELL Extended Powell function evaluation
     % Input:
     %   x     : n-dimensional vector (n must be even)
-    %   alpha : Scaling factor for the odd term (scalar)
-    %   beta  : Offset value for the odd term (scalar)
-    %   gamma : Offset value for the even terms (scalar)
     % Output:
     %   F : scalar function value
-    
+
+    % Badly scaling parameter
+    alpha   = 1e4;
+    beta    = 1;
+    gamma   = 1 + 1e-4;
+
     % Dimension of input vector
     n = length(x);
     

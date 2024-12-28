@@ -1,10 +1,14 @@
-function HessF = extended_powell_hess(x, alpha, beta, gamma)
+function HessF = extended_powell_hess(x)
     % EXTENDED_POWELL_HESS Hessian of the Extended Powell function
     % Input:
     %   x     : n-dimensional vector (n must be even)
-    %   alpha : Scaling factor for the odd term (scalar)
     % Output:
     %   HessF : (n x n) Hessian matrix (symmetric tri-diagonal)
+    
+    % Badly scaling parameter
+    alpha   = 1e4;
+    beta    = 1;
+    gamma   = 1 + 1e-4;
 
     % Dimension of input vector
     n = length(x);

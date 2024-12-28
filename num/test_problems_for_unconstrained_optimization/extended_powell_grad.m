@@ -1,10 +1,14 @@
-function gradF = extended_powell_grad(x, alpha, beta, gamma)
+function gradF = extended_powell_grad(x)
     % EXTENDED_POWELL_GRAD Gradient of the Extended Powell function
     % Input:
     %   x     : n-dimensional vector (n must be even)
-    %   alpha : Scaling factor for the odd term (scalar)
     % Output:
     %   gradF : n-dimensional gradient vector
+
+    % Badly scaling parameter
+    alpha   = 1e4;
+    beta    = 1;
+    gamma   = 1 + 1e-4;
 
     % Dimension of input vector
     n = length(x);

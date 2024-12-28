@@ -11,9 +11,9 @@ n = length(x_0); % dimension of the problem
 %% Initialization
 % -- Functions --
 addpath("test_problems_for_unconstrained_optimization\");
-% f = @extended_powell_badly_scaled;
-% gradF = @extended_powell_badly_scaled_grad;
-% hessF = @extended_powell_badly_scaled_hess;
+% f = @extended_powell;
+% gradF = @extended_powell;
+% hessF = @extended_powell;
 
 % f = @extended_rosenbrock;
 % gradF = @extended_rosenbrock_grad;
