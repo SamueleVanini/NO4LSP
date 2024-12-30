@@ -2,7 +2,7 @@ clear
 clc
 close all
 
-file = 'x0_prob82_approx_precond.mat';
+file = 'x0_prob82_approx-12_specific.mat';
 load(file);
 
 %% Set functions
