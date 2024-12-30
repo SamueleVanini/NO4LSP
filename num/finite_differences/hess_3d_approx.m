@@ -1,11 +1,15 @@
-function hess_f = hess_3d_approx(f, x_bar, h, f_xbar)
+function hess_f = hess_3d_approx(f, x_bar, h, f_xbar, specific)
 %HESS_3D_APPROX - Approximation of the Hessian of f
 %   Based on function evaluation
 %   Only for tri-diagonal hessian
 
 n = length(x_bar);
-he = @(i) h*(double(1:n == i)');
 
+if specific
+    he = @(i) h*abs(x_bar(i))*(double(1:n == i)');
+else
+    he = @(i) h*(double(1:n == i)');
+end
 main_diag = zeros(n, 1);
 off_diag = zeros(n - 1, 1);
 
