@@ -5,8 +5,8 @@ close all
 %% Setup
 % 500 random points
 rng(0);
-n_points = 500;
-n = 1000;
+n_points = 1000;
+n = 100000;
 
 x = rand(n, n_points);
 
@@ -17,14 +17,17 @@ fprintf("Dimension of the problem: %d\n", n);
 % fprintf("-- Extended Powell\n\n");
 % grad_f = @extended_powell_grad;
 % hess_f = @extended_powell_hess;
+% appr = @extended_powell_hess_approx;
 
 % fprintf("-- Extended Rosenbrock\n\n");
 % grad_f = @extended_rosenbrock_grad;
 % hess_f = @extended_rosenbrock_hess;
+% appr = @extended_rosenbrock_hess_approx;
 
 fprintf("-- Problem 82\n\n");
 grad_f = @problem_82_grad;
 hess_f = @problem_82_hess;
+appr = @problem_82_hess_approx;
 
 %% Exact hessian
 exact_hessian = zeros(1, n_points);
@@ -36,12 +39,12 @@ end
 
 fprintf("---- Exact Hessian average time (%d points): %f s\n", n_points,  mean(exact_hessian));
 
-%% Jacobian Approximation (Exact gradient)
+%% Hessian Approximation
 approx_hessian = zeros(1, n_points);
 for i = 1:n_points
     tic;
     F_x = grad_f(x(:, i));
-    jacobian_3d_approx(grad_f, x(:, i), h, F_x, false);
+    appr(x(:, i), h, false, grad_f, F_x);
     approx_hessian(i) =  toc;
 end
 
@@ -52,7 +55,7 @@ spec_approx_hessian = zeros(1, n_points);
 for i = 1:n_points
     tic;
     F_x = grad_f(x(:, i));
-    jacobian_3d_approx(grad_f, x(:, i), h, F_x, true);
+    appr(x(:, i), h, true, grad_f, F_x);
     spec_approx_hessian(i) =  toc;
 end
 
