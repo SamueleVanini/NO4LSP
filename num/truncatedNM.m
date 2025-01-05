@@ -1,7 +1,8 @@
 function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
     x_sequence, backtrack_sequence, pcg_sequence] = ...
     truncatedNM(f, grad_f, hess_f, x_initial, max_iteration, ...
-    tollerance, c1, rho, max_backtrack, do_pcg_precond, h, specific_approx)
+    tollerance, c1, rho, max_backtrack, do_pcg_precond, ...
+    h, specific_approx, hess_approx)
 %TRUNCATEDNM - Find a minima of a function f - Truncated Newton Method
 %
 %   Syntax
@@ -31,6 +32,12 @@ function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
 %           positive scalar integer
 %       do_pcg_precond - Indicates if apply preconditioning to Hessian;
 %           boolean
+%       h - Level of approximation
+%           positive scalar
+%       specific_approx - Indicates if apply specific approximation;
+%           boolean
+%       hess_approx - Compute the approximated hessian
+%           function handle
 %
 %   Output:
 %       x_found - Solution found by TNM
@@ -62,7 +69,7 @@ norm_grad_f_xk = norm(grad_f_xk);
 
 % Check for hessian
 if isempty(hess_f)
-    hess_f = @(x) jacobian_3d_approx(grad_f, x, h, grad_f_xk, specific_approx);
+    hess_f = @(x) hess_approx(x, h, specific_approx, grad_f, grad_f_xk);
 end
 
 % x_k, pcg and backtracking sequences
