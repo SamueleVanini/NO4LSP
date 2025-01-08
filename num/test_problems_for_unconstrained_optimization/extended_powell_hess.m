@@ -27,7 +27,7 @@ function HessF = extended_powell_hess(x)
         k = i;
         % diagonal
         main_diag(k) = (alpha*x(k+1))^2 + 2*exp(-2*x(k)) + exp(-x(k))*(exp(-x(k+1)) - gamma);
-        off_diag(k) = 2*x(k)*x(k+1)*alpha^2 - alpha + exp(-x(k) - x(k+1));
+        off_diag(k) = 2*x(k)*x(k+1)*alpha^2 - alpha*beta + exp(-x(k) - x(k+1));
 
         k = i+1;
         main_diag(k) = (alpha*x(k - 1))^2 + 2*exp(-2*x(k)) + exp(-x(k))*(exp(-x(k-1)) - gamma);
