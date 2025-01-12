@@ -8,7 +8,7 @@ addpath("starting_points\");
 
 %% Variables Initialization
 % Function + starting points
-load('Ext_Rosenbrock.mat');
+load('Ext_Powell.mat');
 
 % Outer loop
 max_iterations = 2000;
