@@ -86,14 +86,12 @@
             end
         end
 
-        if precond
-            P = R' * R; % Use the Cholesky factor R computed above as a preconditioner
-        else
-            P = []; % If no precodition is required, ignore it
+        if ~precond
+            R = []; % If no precodition is required, ignore it
         end
 
         % Continue with the common Newton method with backtracking
-        [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk, [], [], P);
+        [pk, ~, ~, ~, ~] = pcg(Bk, -gradfk, [], [], R, R');
 
         % Reset the value of alpha
         alpha = 1;
