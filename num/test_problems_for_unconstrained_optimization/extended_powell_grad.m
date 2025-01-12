@@ -1,10 +1,14 @@
-function gradF = extended_powell_grad(x, alpha, beta, gamma)
+function gradF = extended_powell_grad(x)
     % EXTENDED_POWELL_GRAD Gradient of the Extended Powell function
     % Input:
     %   x     : n-dimensional vector (n must be even)
-    %   alpha : Scaling factor for the odd term (scalar)
     % Output:
     %   gradF : n-dimensional gradient vector
+
+    % Badly scaling parameter
+    alpha   = 1e4;
+    beta    = 1;
+    gamma   = 1 + 1e-4;
 
     % Dimension of input vector
     n = length(x);
@@ -21,10 +25,11 @@ function gradF = extended_powell_grad(x, alpha, beta, gamma)
     for i = 1:2:n-1
     
         % Odd indices
-        gradF(i)   =  alpha^2*x(i)*x(i+1)^2 - alpha*beta*x(i+1) - exp(-2*x(i)) - exp(-x(i)-x(i+1)) + gamma*exp(-x(i));
+        k = i;
+        gradF(k)   =  x(k)*x(k+1)^2*alpha^2 - alpha*beta*x(k+1) - exp(-2*x(k)) - exp(-x(k)-x(k+1)) + gamma*exp(-x(k));
     
         % Even indices
-        % gradF(i+1) = alpha^2*x(i+1)*x(i)^2 - alpha*beta*x(i) - exp(-2*x(i+1)) - exp(-x(i+1))*exp(-x(i)) + gamma*exp(-x(i+1));
-        gradF(i+1) = x(i+1)*x(i)^2*alpha^2 - alpha*beta*x(i) - exp(-2*x(i+1)) - exp(-x(i)-x(i+1)) + gamma*exp(-x(i+1));
+        k = i+1;
+        gradF(k) = x(k)*x(k-1)^2*alpha^2 - alpha*beta*x(k-1) - exp(-2*x(k)) - exp(-x(k)-x(k-1)) + gamma*exp(-x(k));
     end
 end

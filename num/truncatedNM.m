@@ -1,7 +1,8 @@
 function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
     x_sequence, backtrack_sequence, pcg_sequence] = ...
     truncatedNM(f, grad_f, hess_f, x_initial, max_iteration, ...
-    tollerance, c1, rho, max_backtrack, do_pcg_precond)
+    tollerance, c1, rho, max_backtrack, do_pcg_precond, ...
+    h, specific_approx, hess_approx)
 %TRUNCATEDNM - Find a minima of a function f - Truncated Newton Method
 %
 %   Syntax
@@ -31,6 +32,12 @@ function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
 %           positive scalar integer
 %       do_pcg_precond - Indicates if apply preconditioning to Hessian;
 %           boolean
+%       h - Level of approximation
+%           positive scalar
+%       specific_approx - Indicates if apply specific approximation;
+%           boolean
+%       hess_approx - Compute the approximated hessian
+%           function handle
 %
 %   Output:
 %       x_found - Solution found by TNM
@@ -56,8 +63,14 @@ function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
 % Starting point
 x_k = x_initial;
 f_xk = f(x_k);
+
 grad_f_xk = grad_f(x_k);
 norm_grad_f_xk = norm(grad_f_xk);
+
+% Check for hessian
+if isempty(hess_f)
+    hess_f = @(x) hess_approx(x, h, specific_approx, grad_f, grad_f_xk);
+end
 
 % x_k, pcg and backtracking sequences
 x_sequence = zeros(length(x_initial), max_iteration);
@@ -83,27 +96,30 @@ while i < max_iteration && ...          % iteration
     precond_type = -1; % no preconditioning
     if do_pcg_precond
         try
-            % ichol is more stable and usually a better option
-            precond = ichol(sparse(A));
-            precond_type = 1; % ichol
+            try
+                % ichol is more stable and usually a better option
+                precond = ichol(sparse(A));
+                precond_type = 1; % ichol
+            catch ME
+                % A is not SPD matrix, using ilu preconditioning
+                precond = ilu(sparse(A));
+                precond_type = 2; % ilu
+            end
         catch ME
-            % A is not SPD matrix, using ilu preconditioning
-            precond = ilu(sparse(A));
-            precond_type = 2; % ilu
+            precond = [];
+            precond_type = 0; % cannot use preconditioning
         end
     end
 
     % Using -grad_f(xk) as starting point will guarantee that pcg will
     % return a descent direction, even if matrix A is not SPD
-    [desc_dir, pcg_flag, res, pcg_iter, ~] = ...
+    [desc_dir, pcg_flag, ~, pcg_iter, ~] = ...
         pcg(A, -grad_f_xk, pcg_tol, pcg_maxit, precond, precond', -grad_f_xk);
-    
-    % Check for pcg failure
-    if pcg_flag == 1
-        failure = 1;
-        flag = sprintf("Failure: pcg did %d iteration but did not converge." + ...
-            " resrel = %.3g", pcg_iter, res);
-        break
+
+    % check if pcg return a NaN vector
+    if ~any(desc_dir)
+        % use default value
+        desc_dir = -grad_f_xk;
     end
 
     %% -- Backtracking --
