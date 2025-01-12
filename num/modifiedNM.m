@@ -1,7 +1,7 @@
-    function [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = ...
+    function [xk, fk, gradfk_norm, k, failure, flag, xseq, btseq, corrseq] = ...
         modifiedNM(...
-        x0, f, gradf, Hessf, h, kmax, ...
-        tolgrad, c1, rho, btmax, precond, correction_technique, varargin)
+        f, gradf, Hessf, x0, kmax, tolgrad, ...
+        c1, rho, btmax, precond, h, specific_approx, hess_approx, correction_technique, varargin)
     % Modified Newton's Method with various Hessian correction techniques
     %
     % The function expects the following correction parameters to be passed via varargin:
@@ -22,20 +22,6 @@
     %
     % Example usage:
     %   [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'modLDL', 1e-6);
-    
-    if isempty(h)
-        h = 1e-4;
-    end
-
-    % Default behaviour is preconditioning
-    if nargin < 10 || isempty(precond)
-        precond = true;
-    end
-    
-    % Default correction technique is 'spectral'
-    if nargin < 11 || isempty(correction_technique)
-        correction_technique = 'spectral';
-    end
 
     % Parse additional parameters from varargin
     correction_params = varargin;
@@ -57,21 +43,12 @@
             error('Unknown correction technique: %s', correction_technique);
     end
 
-    if ~isa(gradf, 'function_handle') && isempty(gradf)
-        addpath(fullfile(pwd, 'finite_differences/'));
-        gradf = @(x) grad_approx(f, x, h);
-    end
-
-    if ~isa(Hessf, 'function_handle') && isempty(Hessf)
-        addpath(fullfile(pwd, 'finite_differences/'));
-        Hessf = @(x) hess_3d_approx(f, x, h);
-    end
-
     % Function handle for the armijo condition
     farmijo = @(fk, alpha, c1_gradfk_pk) ...
         fk + alpha * c1_gradfk_pk;
 
     % Solution sequence tracking variable initialization
+    failure = false;
     xseq = zeros(length(x0), kmax);
     btseq = zeros(1, kmax);
     corrseq = zeros(1, kmax);
@@ -82,6 +59,11 @@
     fk = f(xk);
     gradfk = gradf(xk);
     gradfk_norm = norm(gradfk);
+
+    % Check for hessian approximation
+    if isempty(Hessf)
+        Hessf = @(x) hess_approx(x, h, specific_approx, gradf, gradfk);
+    end
     
     % Stop when stopping criteria is met
     while k < kmax && gradfk_norm >= tolgrad
@@ -95,7 +77,13 @@
         catch
             % If it fails again then Bk is not P.D.
             Bk = correction(Hk); % Correct Bk using the choosen approach (will preserve sparsity)
-            R = ichol(Bk); % Retry Cholesky, if still not P.D. error will raise
+            try 
+                R = ichol(Bk); % Retry Cholesky, if still not P.D. error will raise
+            catch
+                failure = true;
+                flag = 'Corrected matrix Bk is not S.P.D.';
+                break;
+            end
         end
 
         if precond
@@ -133,6 +121,8 @@
         
         % If backtracking met stopping criteria raise an error
         if bt == btmax && fnew > farmijo(fk, alpha, c1_gradfk_pk)
+            failure = true;
+            flag = 'Could not satisfy armijo'
             error(['Could not find a good step length during backtracking.\n' ...
                    'Details:\n' ...
                    '  Iteration: %d\n' ...
@@ -161,6 +151,17 @@
         btseq(k) = bt;
         % Store the correction applied
         corrseq(k) = norm(Hk - Bk, 'fro');
+    end
+
+    % Flag output
+    if ~failure
+        if gradfk_norm < tolgrad
+            flag = sprintf('Satysfied the tollerance in %d iteration', k);
+        else
+            flag = sprintf(['Failure: tnm did %d iteration but did not converge. ' ...
+                'Norm of the gradient = %.3g'], k, gradfk_norm);
+            failure = true;
+        end
     end
 
     % "Cut" xseq and btseq to the correct size

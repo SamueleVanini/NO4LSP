@@ -8,7 +8,7 @@ addpath("starting_points\");
 
 %% Variables Initialization
 % Function + starting points
-load('Ext_Powell.mat');
+load('Ext_Rosenbrock.mat');
 
 % Outer loop
 max_iterations = 2000;
@@ -32,7 +32,6 @@ point = 1;
 % Stats
 tot_success = 3*length(point);
 
-%% Apply methods
 %% Dimension 1000
 for i = point
     x_0 = x_1000(:, i);
@@ -42,10 +41,10 @@ for i = point
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
-        x_sequence, backtrack_sequence, pcg_sequence] = ...
-    truncatedNM(f, grad_f, hess_f, x_0, max_iterations, ...
+        x_sequence, backtrack_sequence, corr_sequence] = ...
+    modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
-        h_approximation, specific_approx, hess_approx);
+        h_approximation, specific_approx, hess_approx, 'spectral');
     execution_time = toc;
     
     % Output
@@ -75,10 +74,10 @@ for i = point
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
-        x_sequence, backtrack_sequence, pcg_sequence] = ...
+        x_sequence, backtrack_sequence, corr_sequence] = ...
     truncatedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
-        h_approximation, specific_approx, hess_approx);
+        h_approximation, specific_approx, hess_approx, 'spectral');
     execution_time = toc;
     
     % Output
@@ -108,10 +107,10 @@ for i = point
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
-        x_sequence, backtrack_sequence, pcg_sequence] = ...
+        x_sequence, backtrack_sequence, corr_sequence] = ...
     truncatedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
-        h_approximation, specific_approx, hess_approx);
+        h_approximation, specific_approx, hess_approx, 'spectral');
     execution_time = toc;
     
     % Output
