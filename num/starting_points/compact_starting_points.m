@@ -1,5 +1,5 @@
-clear
-clc
+clear;
+clc;
 
 seed = min([318684, 337728, 338137]);
 problem_dim = [1e3 1e4 1e5];
