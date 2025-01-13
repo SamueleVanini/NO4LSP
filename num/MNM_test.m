@@ -27,7 +27,7 @@ h_approximation = 1e-12;
 specific_approx = false;
 
 % Correction method and parameters
-correction_method = 'thresh';
+correction_method = 'spectral';
 correction_parameters = [];
 
 %% Choose points to analyze

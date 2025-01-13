@@ -34,7 +34,7 @@ function Hess = extended_powell_hess_approx(x_bar, h, specific, gradF, gradF_xba
         h_vec = h*ones(n, 1);
     end
 
-    % Perturbations vectors
+    % Perturbation vectors
     e1 = zeros(n, 1);
     e2 = zeros(n, 1);
 
