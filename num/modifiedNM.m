@@ -19,10 +19,7 @@
     %
     % For 'modLDL' correction:
     %   - toleig: tolerance for the correction
-    %
-    % Example usage:
-    %   [xk, fk, gradfk_norm, k, xseq, btseq, corrseq] = modifiedNM(x0, f, gradf, Hessf, kmax, tolgrad, c1, rho, btmax, 'modLDL', 1e-6);
-
+    
     % Parse additional parameters from varargin
     correction_params = varargin;
 

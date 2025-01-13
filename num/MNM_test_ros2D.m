@@ -56,7 +56,7 @@ fprintf('Test with starting point x0 = [%f, %f]\n', x0_2);
     modifiedNM(f, gradf, Hessf, x0_2, kmax, tolgrad, ...
         c1, rho, btmax, do_precondintioning, h_approximation, specific_approx, hess_approx, 'spectral');
 
-% Display results
+%% Display results
 fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));
 fprintf('Function Value: %e\n', fk2);
 fprintf('Gradient Norm: %e\n', gradfk_norm2);
@@ -64,6 +64,8 @@ fprintf('Iterations: %d\n', k2);
 fprintf('\n');
 
 %% Surface Plot and Contour Lines
+fprintf('Plotting results...\n\n');
+
 figure;
 
 % Generate grid for plotting
