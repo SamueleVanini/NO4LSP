@@ -1,3 +1,4 @@
+- [ ] Implementa nuovi grafici negli script di test: in _NM_test.m o print_results?
 - [ ] Implementa eig() and eigs() con proprietà autovalori
     - abbiamo un p preferito?
     - abbiamo un v0 preferito?
