@@ -8,6 +8,10 @@ function [Bk] = modified_ldl_correction(Hk, beta, delta)
         delta = 1e-6;
     end
 
+    if ~issymmetric(Hk) % Check if matrix is symmetric
+        error('Matrix is not symmetric');
+    end
+
     % Add the path to the modLDL function
     addpath(fullfile(pwd, 'matrix_corrections/modLDL'));
 

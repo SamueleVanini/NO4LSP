@@ -1,22 +1,20 @@
-function Bk = spectral_shifting_correction(Hk, toleig, preservesparsity)
-    
+function Bk = spectral_shifting_correction(Hk, toleig)
+    % Function to apply spectral shifting correction while preserving sparsity
+
     if nargin < 2 || isempty(toleig) % Set default value for toleig
         toleig = 1e-8;
     end
 
-    if nargin < 3 % Set default value for preservesparsity
-        preservesparsity = true;
-    end
-
-    if ~ishermitian(Hk) % Check if matrix is symmetric
+    if ~issymmetric(Hk) % Check if the matrix is symmetric
         error('Matrix is not symmetric');
     end
 
-    min_eig = eigs(Hk, 1, 'smallestreal'); % Compute smallest eigenvalue
-    tauk = max(0, toleig - min_eig); % Compute correction
-    Bk = Hk + tauk * eye(size(Hk)); %  Add correction
+    % Compute the smallest eigenvalue
+    min_eig = eigs(Hk, 1, 'smallestabs', 'IsSymmetricDefinite', false, 'tol', 1e-8, 'MaxIterations', 500); 
 
-    if issparse(Hk) && preservesparsity == true % Preserve sparsity
-        Bk = sparse(Bk);
-    end
+    % Compute the correction term
+    tauk = max(0, toleig - min_eig); 
+
+    % Add correction while preserving sparsity
+    Bk = Hk + tauk * speye(size(Hk)); 
 end

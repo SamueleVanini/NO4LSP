@@ -26,6 +26,10 @@ do_precondintioning = true;
 h_approximation = 1e-12;
 specific_approx = false;
 
+% Correction method and parameters
+correction_method = 'thresh';
+correction_parameters = [];
+
 %% Choose points to analyze
 point = 1;
 
@@ -44,7 +48,7 @@ for i = point
         x_sequence, backtrack_sequence, corr_sequence] = ...
     modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
-        h_approximation, specific_approx, hess_approx, 'spectral');
+        h_approximation, specific_approx, hess_approx, correction_method, correction_parameters);
     execution_time = toc;
     
     % Output
@@ -77,7 +81,7 @@ for i = point
         x_sequence, backtrack_sequence, corr_sequence] = ...
     modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
-        h_approximation, specific_approx, hess_approx, 'spectral');
+        h_approximation, specific_approx, hess_approx, correction_method, correction_parameters);
     execution_time = toc;
     
     % Output
@@ -110,7 +114,7 @@ for i = point
         x_sequence, backtrack_sequence, corr_sequence] = ...
     modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
-        h_approximation, specific_approx, hess_approx, 'spectral');
+        h_approximation, specific_approx, hess_approx, correction_method, correction_parameters);
     execution_time = toc;
     
     % Output

@@ -1,0 +1,23 @@
+function Bk = eigenvalue_thresholding_correction(Hk, toleig)
+    % Function to apply eigenvalue thresholding correction while preserving sparsity
+
+    if nargin < 2 || isempty(toleig) % Set default value for toleig
+        toleig = 1e-8;
+    end
+
+    if ~issymmetric(Hk) % Check if the matrix is symmetric
+        error('Matrix is not symmetric');
+    end
+
+    n = size(Hk, 1);
+
+    % Compute eigendecomposition
+    [V, D] = eigs(Hk, n, 'largestabs', 'IsSymmetricDefinite', false, 'tol', 1e-8, 'MaxIterations', 500); % Use eigs with size of Hk since we need *all* eigenvalues (eig with sparse matrices can't return the eigenvectors)
+
+    % Threshold eigenvalues
+    D = spdiags(max(diag(D), toleig), 0, n, n); % Ensure eigenvalues are >= toleig
+    V = sparse(V); % Enforce sparsity on V (eigs do not preserve sparsity)
+
+    % Reconstruct the matrix
+    Bk = V * D * V'; % Reconstruction of matrix
+end

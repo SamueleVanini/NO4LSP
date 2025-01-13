@@ -9,9 +9,8 @@
     % For 'spectral' correction (recomended):
     %   - toleig: tolerance for the correction
     %
-    % For 'tresh' correction:
+    % For 'thresh' correction:
     %   - toleig: tolerance for the correction
-    %   - maxit:  maximum iterations allowed for the correction
     %
     % For 'diag' correction:
     %   - toleig: tolerance for the correction
@@ -28,14 +27,14 @@
 
     % Define function handle for correction, based on the user choice
     switch correction_technique
-        case 'modLDL'
-            correction = @(X) modified_ldl_correction(X, correction_params{:});
-        case 'tresh'
-            correction = @(X) eigenvalue_tresholding_correction(X, correction_params{:});
-        case 'diag'
-            correction = @(X) diagonal_loading_correction(X, correction_params{:});
         case 'spectral'
             correction = @(X) spectral_shifting_correction(X, correction_params{:});
+        case 'thresh'
+            correction = @(X) eigenvalue_thresholding_correction(X, correction_params{:});
+        case 'diag'
+            correction = @(X) diagonal_loading_correction(X, correction_params{:});
+        case 'modLDL'
+            correction = @(X) modified_ldl_correction(X, correction_params{:});
         otherwise
             error('Unknown correction technique: %s', correction_technique);
     end

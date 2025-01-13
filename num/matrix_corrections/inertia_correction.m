@@ -4,7 +4,7 @@ function [Bk] = inertia_correction(Hk, toleig)
         toleig = 1e-8;
     end
 
-    if ~ishermitian(Hk) % Check if matrix is symmetric
+    if ~issymmetric(Hk) % Check if matrix is symmetric
         error('Matrix is not symmetric');
     end
 
