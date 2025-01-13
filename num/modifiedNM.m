@@ -48,11 +48,14 @@
         fk + alpha * c1_gradfk_pk;
 
     % Solution sequence tracking variable initialization
-    failure = false;
     xseq = zeros(length(x0), kmax);
     btseq = zeros(1, kmax);
     corrseq = zeros(1, kmax);
-    
+
+    % Failure traickig variables initialization
+    flag = '';
+    failure = false;
+
     % Starting values initialization
     k = 0;
     xk = x0;
@@ -60,7 +63,7 @@
     gradfk = gradf(xk);
     gradfk_norm = norm(gradfk);
 
-    % Check for hessian approximation
+    % Check whetere to use hessian approximation or not
     if isempty(Hessf)
         Hessf = @(x) hess_approx(x, h, specific_approx, gradf, gradfk);
     end
@@ -86,8 +89,9 @@
             end
         end
 
+        % If no precodition is required, ignore it
         if ~precond
-            R = []; % If no precodition is required, ignore it
+            R = [];
         end
 
         % Continue with the common Newton method with backtracking
@@ -104,11 +108,12 @@
 
         c1_gradfk_pk = c1 * gradfk' * pk;
         bt = 0;
-        % Backtracking strategy: 
-        % 2nd condition is the Armijo condition not satisfied
+        
+        % Backtracking strategy
         while bt < btmax && fnew > farmijo(fk, alpha, c1_gradfk_pk)
             % Reduce the value of alpha
             alpha = rho * alpha;
+            
             % Update xnew and fnew w.r.t. the reduced alpha
             xnew = xk + alpha * pk;
             fnew = f(xnew);
@@ -119,16 +124,15 @@
         
         % If backtracking met stopping criteria raise an error
         if bt == btmax && fnew > farmijo(fk, alpha, c1_gradfk_pk)
-            flag = sprintf(['Failure: Could not satisfy Armijo.\n' ...
-                'Details:\n' ...
-                '  Iteration: %d\n' ...
-                '  Current function value (fk): %e\n' ...
-                '  New function value (fnew): %e\n' ...
-                '  Armijo condition value: %e\n' ...
-                '  Step length (alpha): %e\n' ...
-                '  Gradient dot product (c1_gradfk_pk): %e\n' ...
-                '  Backtracking steps: %d\n'], ...
-                k, fk, fnew, farmijo(fk, alpha, c1_gradfk_pk), alpha, c1_gradfk_pk, bt);
+            flag = sprintf([...
+                'Failure: Could not satisfy Armijo. ' ...
+                'Details: ' ...
+                '  Iteration: %d, ' ...
+                '  New function value (fnew): %e, ' ...
+                '  Armijo condition value: %e, ' ...
+                '  Step length (alpha): %e' ...
+                ], ...
+                k, fnew, farmijo(fk, alpha, c1_gradfk_pk), alpha);
             failure = true;
             break;
         end
