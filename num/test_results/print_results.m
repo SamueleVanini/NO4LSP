@@ -1,16 +1,16 @@
-clear
-clc
-close all
+close all;
+clear;
+clc;
 
+%% Load problem file
 file = 'x0_prob82_approx-12_specific.mat';
 load(file);
 
 %% Set functions
 addpath("..\test_problems_for_unconstrained_optimization\");
+
 % f = @extended_powell;
-
 % f = @extended_rosenbrock;
-
 f = @problem_82;
 
 %% Display results
@@ -30,7 +30,8 @@ if do_precon
 end
 
 %% Plot results
-% -- Contour line --
+
+% ** Contour line **
 disp('Contour line');
 
 x_dim = [min(x_seq(1, :)) - 1, max(x_seq(1, :)) + 1];
@@ -54,7 +55,7 @@ if size(x_seq, 2) > 1
 end
 hold off
 
-% -- Surface plot --
+% ** Surface plot **
 disp('Surface plot');
 
 surf_fig = figure();
