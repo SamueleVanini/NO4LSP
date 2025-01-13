@@ -1,5 +1,3 @@
-- [ ] alpha * beta in codice giovi
-- [X] implementare sparsità in ogni fase del codice (vedi correzioni)
 - [ ] implementa eig() and eigs() con proprietà autovalori
     - abbiamo un p preferito?
     - abbiamo un v0 preferito?
