@@ -1,8 +1,9 @@
-clc
-clear
-close all
+close all;
+clear;
+clc;
 
 %% Setup
+
 % 500 random points
 rng(0);
 n_points = 1000;
