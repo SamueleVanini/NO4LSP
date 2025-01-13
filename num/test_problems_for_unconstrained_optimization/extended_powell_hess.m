@@ -24,16 +24,17 @@ function HessF = extended_powell_hess(x)
 
     % Compute the gradient
     for i = 1:2:n-1
+        
         k = i;
-        % diagonal
         main_diag(k) = (alpha*x(k+1))^2 + 2*exp(-2*x(k)) + exp(-x(k))*(exp(-x(k+1)) - gamma);
         off_diag(k) = 2*x(k)*x(k+1)*alpha^2 - alpha*beta + exp(-x(k) - x(k+1));
 
         k = i+1;
         main_diag(k) = (alpha*x(k - 1))^2 + 2*exp(-2*x(k)) + exp(-x(k))*(exp(-x(k-1)) - gamma);
-        % off_diag(k) = 0
+        % off_diag(k) = 0 % Skipped since sparsity storage will automaticcally fill
     end
     
+    % Implement Hessian as sparse
     Bin = [[off_diag; 0], main_diag, [0; off_diag]];
     HessF = spdiags(Bin, [-1 0 1], n, n);
 end

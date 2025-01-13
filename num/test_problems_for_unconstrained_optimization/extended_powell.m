@@ -22,13 +22,13 @@ function F = extended_powell(x)
     F = 0;
     
     % Compute the function value
-    for i = 1:2:n-1
-        % compute k = i and k = i + 1 at the same time
-        % k = i always odd
+    for i = 1:2:n-1 % Compute entries at k=i and k=i+1 at the same time
+        
+        % k = i (odd)
         k = i;
         f_odd = alpha * x(k) * x(k+1) - beta;
 
-        % k = i + 1 always even
+        % k = i + 1 (even)
         k = i+1;
         f_even = exp(-x(k - 1)) + exp(-x(k)) - gamma;
         

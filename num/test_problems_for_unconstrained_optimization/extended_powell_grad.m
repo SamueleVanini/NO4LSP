@@ -26,7 +26,7 @@ function gradF = extended_powell_grad(x)
     
         % Odd indices
         k = i;
-        gradF(k)   =  x(k)*x(k+1)^2*alpha^2 - alpha*beta*x(k+1) - exp(-2*x(k)) - exp(-x(k)-x(k+1)) + gamma*exp(-x(k));
+        gradF(k) = x(k)*x(k+1)^2*alpha^2 - alpha*beta*x(k+1) - exp(-2*x(k)) - exp(-x(k)-x(k+1)) + gamma*exp(-x(k));
     
         % Even indices
         k = i+1;
