@@ -1,9 +1,8 @@
-- [ ] implementa eig() and eigs() con proprietà autovalori
+- [ ] Implementa eig() and eigs() con proprietà autovalori
     - abbiamo un p preferito?
     - abbiamo un v0 preferito?
     - passare Afun è meglio?
     - 'fail': Treatment of nonconverged eigenvalues in the output
-- [ ] controllo exploiting delle strutture delle matrici in fase di approssimazione
-- [ ] controllo per ogni for del codice, sostituire con operazioni algebriche
+- [ ] Controllo per ogni for del codice, sostituire con operazioni algebriche
 - [ ] Ricontrollino risultati
 - [ ] Report e slides di stoc
