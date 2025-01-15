@@ -1,53 +1,171 @@
-clear
-clc
-close all
+%% Initialization
+% Clear the workspace and command window
+clc; clear; close all;
 
-%% Set Function
-addpath("test_problems_for_unconstrained_optimization\");
-addpath("finite_differences\");
+% Parameters
+rho = 0.5;        % Backtracking reduction factor
+c1 = 1e-4;        % Armijo condition parameter
+tolgrad = 1e-6;   % Gradient tolerance for stopping
+btmax = 50;       % Maximum backtracking steps
+kmax = 1000;      % Maximum iterations
 
-% f = @extended_powell;
-% gradF = @extended_powell_grad;
-% hessF = @extended_powell_hess;
+% PCG preconditioning
+do_precondintioning = false;
 
-% f = @extended_rosenbrock;
-% gradF = @extended_rosenbrock_grad;
-% hessF = @extended_rosenbrock_hess;
+% Hessian approximation
+h_approximation = 1e-12;
+specific_approx = false;
+hess_approx = [];
 
-f = @problem_82;
-gradF = @problem_82_grad;
-% hessF = @problem_82_hess;
+% Starting points
+x0_1 = [1.2; 1.2];
+x0_2 = [-1.2; 1];
 
-hessF = [];
+%% Define Rosenbrock Function, Gradient, and Hessian
 
-%% Variables Initialization
-% TNM
-x_init = [.5; .5];    % change here
-max_iter = 1000;
-tollerance = 1e-8;
+% Add path to functions
+addpath('test_problems_for_unconstrained_optimization\'); 
 
-% backtracking
-c1 = 1e-4;
-rho = .5;
-max_backtrack = 100;
+% Function
+f = @(x) rosenbrock(x);
 
-% preconditioning
-do_precon = false;
+% Gradient
+gradf = @(x) rosenbrock_grad(x);
 
-% hessian approximation
-h = 1e-12;
-specific = true;
+% Hessian
+Hessf = @(x) rosenbrock_hess(x);
 
-%% Apply TNM
-[x_found, f_x, norm_grad_f_x, iteration, failure, flag, x_seq, ...
-    backtrack_seq, pcg_seq] = ...
-truncatedNM(f, gradF, hessF, x_init, max_iter, tollerance, c1, ...
-    rho, max_backtrack, do_precon, h, specific);
+%% Test the Truncated Newton's Method - Starting Point 1
+fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
 
-%% Save results
-file_name = "x0_prob82_approx-12_specific.mat";  % change here
+[xk1, fk1, gradfk_norm1, k1, failure1, flag1, xseq1, btseq1, pcgseq1] = ...
+    truncatedNM(f, gradf, Hessf, x0_1, kmax, tolgrad, ...
+        c1, rho, btmax, do_precondintioning, h_approximation, specific_approx, hess_approx);
 
-complete_name = sprintf("test_results/%s", file_name);
-save(complete_name, "x_init", "x_found", "f_x", "norm_grad_f_x", ...
-    "iteration", "failure", "flag", "x_seq", "backtrack_seq", ...
-    "pcg_seq", "max_iter", "do_precon")
+%% Display results
+fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));
+fprintf('Function Value: %e\n', fk1);
+fprintf('Gradient Norm: %e\n', gradfk_norm1);
+fprintf('Iterations: %d\n', k1);
+fprintf('\n');
+
+%% Test the Truncated Newton's Method - Starting Point 2
+fprintf('Test with starting point x0 = [%f, %f]\n', x0_2);
+
+[xk2, fk2, gradfk_norm2, k2, failure2, flag2, xseq2, btseq2, pcgseq2] = ...
+    truncatedNM(f, gradf, Hessf, x0_2, kmax, tolgrad, ...
+        c1, rho, btmax, do_precondintioning, h_approximation, specific_approx, hess_approx);
+
+%% Display results
+fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));
+fprintf('Function Value: %e\n', fk2);
+fprintf('Gradient Norm: %e\n', gradfk_norm2);
+fprintf('Iterations: %d\n', k2);
+fprintf('\n');
+
+%% Surface Plot and Contour Lines
+fprintf('Plotting results...\n\n');
+
+figure;
+
+% Generate grid for plotting
+x1_vals = -2:0.1:2;
+x2_vals = -1:0.1:3;
+[X1, X2] = meshgrid(x1_vals, x2_vals);
+F_vals = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
+
+% Surface plot
+subplot(1, 2, 1);
+surf(X1, X2, F_vals, 'EdgeColor', 'none');
+hold on;
+plot3(xseq1(1, :), xseq1(2, :), arrayfun(@(i) f(xseq1(:, i)), 1:size(xseq1, 2)), ...
+      '-rx', 'LineWidth', 2);
+plot3(xseq2(1, :), xseq2(2, :), arrayfun(@(i) f(xseq2(:, i)), 1:size(xseq2, 2)), ...
+      '-bx', 'LineWidth', 2);
+title('Surface Plot with Iterates');
+xlabel('x_1'); ylabel('x_2'); zlabel('f(x)');
+legend({'Function surface', 'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
+grid on; view(45, 30);
+
+% Contour plot
+subplot(1, 2, 2);
+contour(X1, X2, F_vals, 20, 'LineWidth', 1.5);
+hold on;
+plot(xseq1(1, :), xseq1(2, :), '-rx', 'LineWidth', 2);
+plot(xseq2(1, :), xseq2(2, :), '-bx', 'LineWidth', 2);
+title('Contour Plot with Iterates');
+xlabel('x_1'); ylabel('x_2');
+legend({'Function contour lines', 'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
+grid on;
+
+%% Bar Plot for Backtracking Steps
+figure;
+
+% Define the number of iterations
+iterations1 = 1:length(btseq1);
+iterations2 = 1:length(btseq2);
+
+% Create a grouped bar plot
+bar_data = zeros(2, max(length(btseq1), length(btseq2))); % Preallocate
+bar_data(1, 1:length(btseq1)) = btseq1; % First group
+bar_data(2, 1:length(btseq2)) = btseq2; % Second group
+
+bar(bar_data', 'grouped'); % Transpose for grouped display
+
+% Add labels and title
+title('Backtracking Steps per Iteration');
+xlabel('Iteration');
+ylabel('Number of Backtracking Loops');
+legend({'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
+grid on;
+
+%% Plot the Iterates
+figure;
+
+% Plot for starting point 1
+subplot(1, 2, 1);
+plot(xseq1(1, :), xseq1(2, :), '--x', 'LineWidth', 1.5);
+title('Truncated Newton - Start [1.2, 1.2]');
+xlabel('x_1'); ylabel('x_2');
+grid on;
+
+% Plot for starting point 2
+subplot(1, 2, 2);
+plot(xseq2(1, :), xseq2(2, :), '--x', 'LineWidth', 1.5);
+title('Truncated Newton - Start [-1.2, 1]');
+xlabel('x_1'); ylabel('x_2');
+grid on;
+
+% 5. PCG bar plot
+figure;
+subplot(1, 2, 1);
+pcg_bar_plot(pcgseq1)
+xlabel('TNM Iteration');
+ylabel('Pcg Iteration');
+title('PCG Iterations');
+
+subplot(1, 2, 2);
+pcg_bar_plot(pcgseq2)
+xlabel('TNM Iteration');
+ylabel('Pcg Iteration');
+title('PCG Iterations');
+
+%% End
+fprintf('Test Completed!\n');
+
+%% Help functions
+function pcg_bar_plot(pcgseq)
+colors_legend = {'Success', 'MaxIt Reached', ...
+    'Ill Conditioned problem', 'Stagnation', 'Not SPD Matrix'};
+
+idxs = pcgseq(2, :); % pcg flag at each iterations
+counts = zeros(size(pcgseq, 2), length(colors_legend));
+
+for i = 1:length(colors_legend)
+    counts(:, i) = pcgseq(1, :);
+    counts(idxs ~= i-1, i) = 0;
+end
+
+bar(counts, 'stacked');
+legend(colors_legend);
+end
