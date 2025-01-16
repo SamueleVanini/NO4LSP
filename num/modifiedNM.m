@@ -1,4 +1,4 @@
-    function [xk, fk, gradfk_norm, k, failure, flag, xseq, btseq, corrseq] = ...
+    function [xk, fk, gradfk_norm, k, failure, flag, xseq, btseq, corrseq, fseq, gradnormseq] = ...
         modifiedNM(...
         f, gradf, Hessf, x0, kmax, tolgrad, ...
         c1, rho, btmax, precond, h, specific_approx, hess_approx, correction_technique, varargin)
@@ -47,6 +47,8 @@
     xseq = zeros(length(x0), kmax);
     btseq = zeros(1, kmax);
     corrseq = zeros(1, kmax);
+    fseq = zeros(1, kmax);
+    gradnormseq = zeros(1, kmax);
 
     % Failure traickig variables initialization
     flag = '';
@@ -58,6 +60,9 @@
     fk = f(xk);
     gradfk = gradf(xk);
     gradfk_norm = norm(gradfk);
+
+    fseq(1) = fk;
+    gradnormseq(1) = gradfk_norm;
 
     % Check whetere to use hessian approximation or not
     if isempty(Hessf)
@@ -149,6 +154,11 @@
         btseq(k) = bt;
         % Store the correction applied
         corrseq(k) = norm(Hk - Bk, 'fro');
+
+        % Store function value
+        fseq(k) = fk;
+        % Store gradient norm value 
+        gradnormseq(k) = gradfk_norm;
     end
 
     % Flag output
