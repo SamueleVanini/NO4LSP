@@ -55,6 +55,6 @@ class CustomersSimulator:
             line = f.readline()
             comma_splits = line.split(",")
             arrival_day = comma_splits[0].split("=")[1]
-            percived_value = comma_splits[1].removesuffix(")").split("=")[1]
+            percived_value = comma_splits[1].removesuffix(")\n").split("=")[1]
             customers.append(Customer(int(arrival_day), float(percived_value)))
         return customers

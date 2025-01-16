@@ -2,14 +2,22 @@
 Module to provide classes and functions to create an environment for a Markov decision process
 """
 
-from stoc.simulator.clients_traces import Customer
+from simulator.clients_traces import Customer
 
 
 class AirlineModel:
 
     def __init__(
-        self, nmax_tickets: int, nmax_days: int, min_price: int, max_price: int, nbins_price: int, trace: list[Customer]
+        self,
+        discout_factor: float,
+        nmax_tickets: int,
+        nmax_days: int,
+        min_price: int,
+        max_price: int,
+        nbins_price: int,
+        trace: list[Customer],
     ) -> None:
+        self.discout_factor = discout_factor
         self.nmax_tickets = nmax_tickets
         self.nmax_days = nmax_days
         self.min_price = min_price
@@ -28,18 +36,18 @@ class AirlineModel:
         Returns:
             tuple[int, int, bool]: tuple containing the reward obtained and an indication to check if we have other tickets to sell
         """
-        ticket_to_sell, demand_level, day = action
+        ticket_to_sell, price_level, day = action
         ticket_sold = 0
-        demand_scaled = (demand_level - self.min_price) / (self.max_price - self.min_price)
+        value_scaled = (price_level - self.min_price) / (self.max_price - self.min_price)
         if ticket_to_sell == 0:
-            return 0, True
+            return 0, 0, True
         for customer in self.customers:
             if customer.arrival_day != day:
                 continue
             if ticket_to_sell == 0:
                 break
-            if demand_scaled <= customer.percived_value:
+            if value_scaled <= customer.percived_value:
                 ticket_sold += 1
-        price = max(demand_level - ticket_sold, 0)
-        reward = price * ticket_sold
-        return reward, False
+                ticket_to_sell -= 1
+        reward = price_level * ticket_sold
+        return reward, ticket_sold, ticket_sold == ticket_to_sell
