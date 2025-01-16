@@ -28,7 +28,7 @@ specific_approx = false;
 
 % Correction method and parameters
 correction_method = 'spectral';
-correction_parameters = 1000;
+correction_parameters = 100;
 
 %% Choose points to analyze
 point = 1:11;
