@@ -255,7 +255,11 @@ end
 
 function matrix_corrections(correction_sequence, prob_size)
     figure('Name', sprintf('Matrix Corrections Applied, n = %1.e', prob_size), 'NumberTitle', 'off');
-    stem(find(correction_sequence ~= 0), correction_sequence(correction_sequence ~= 0), 'filled', 'LineWidth', 1.5);
+    if length(find(correction_sequence ~= 0)) >= 100
+        scatter(find(correction_sequence ~= 0), correction_sequence(correction_sequence ~= 0), 'filled', 'LineWidth', 1.5);
+    else
+        stem(find(correction_sequence ~= 0), correction_sequence(correction_sequence ~= 0), 'filled', 'LineWidth', 1.5);
+    end
     xlabel('Iteration');
     ylabel('Correction Value');
     title(sprintf('Matrix Corrections Applied, n = %1.e', prob_size));
