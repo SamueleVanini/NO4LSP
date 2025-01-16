@@ -1,9 +1,3 @@
-- [ ] Implementa nuovi grafici negli script di test: in _NM_test.m o print_results?
-- [ ] Implementa eig() and eigs() con proprietà autovalori
-    - abbiamo un p preferito?
-    - abbiamo un v0 preferito?
-    - passare Afun è meglio?
-    - 'fail': Treatment of nonconverged eigenvalues in the output
 - [ ] Controllo per ogni for del codice, sostituire con operazioni algebriche
 - [ ] Ricontrollino risultati
 - [ ] Report e slides di stoc
