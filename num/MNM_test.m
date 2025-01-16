@@ -8,7 +8,7 @@ addpath("starting_points\");
 
 %% Variables Initialization
 % Function + starting points
-load('Ext_Powell.mat');
+load('Problem_82.mat');
 
 % Outer loop
 max_iterations = 2000;
@@ -28,10 +28,10 @@ specific_approx = false;
 
 % Correction method and parameters
 correction_method = 'spectral';
-correction_parameters = [];
+correction_parameters = 1000;
 
 %% Choose points to analyze
-point = 1;
+point = 1:11;
 
 % Stats
 tot_success = 3*length(point);
