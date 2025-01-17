@@ -25,7 +25,7 @@
 import sys
 
 # File path for saving the output
-output_file = "value_iteration_output.txt"
+output_file = "stoc\\golf_value_iteration_output.txt"
 
 # Redirecting stdout to the file
 with open(output_file, "w") as f:

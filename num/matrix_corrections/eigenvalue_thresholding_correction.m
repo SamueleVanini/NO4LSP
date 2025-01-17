@@ -11,13 +11,13 @@ function Bk = eigenvalue_thresholding_correction(Hk, toleig)
 
     n = size(Hk, 1);
 
-    % Compute eigendecomposition
-    [V, D] = eigs(Hk, n, 'largestabs', 'IsSymmetricDefinite', false, 'tol', 1e-8, 'MaxIterations', 500); % Use eigs with size of Hk since we need *all* eigenvalues (eig with sparse matrices can't return the eigenvectors)
+    % Compute eigendecomposition (use eigs() - rather than eig() - with size of Hk since we need *all* eigenvalues, note: eig() with sparse matrices can't return eigenvectors)
+    [V, D] = eigs(Hk, n, 'largestabs', 'IsSymmetricDefinite', false, 'tol', 1e-8, 'MaxIterations', 500);
 
     % Threshold eigenvalues
-    D = spdiags(max(diag(D), toleig), 0, n, n); % Ensure eigenvalues are >= toleig
-    V = sparse(V); % Enforce sparsity on V (eigs do not preserve sparsity)
+    D = spdiags(max(diag(D), toleig), 0, n, n); % Ensure eigenvalues are >= toleig and enforce sparsity (eigs() do not preserve sparsity)
+    V = sparse(V); % Enforce sparsity on V (eigs() do not preserve sparsity)
 
     % Reconstruct the matrix
-    Bk = V * D * V'; % Reconstruction of matrix
+    Bk = V * D * V';
 end

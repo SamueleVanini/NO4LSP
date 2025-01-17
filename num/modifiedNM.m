@@ -2,22 +2,57 @@
         modifiedNM(...
         f, gradf, Hessf, x0, kmax, tolgrad, ...
         c1, rho, btmax, precond, h, specific_approx, hess_approx, correction_technique, varargin)
-    % Modified Newton's Method with various Hessian correction techniques
+    %   MODIFIEDNM Modified Newton's Method with Hessian Correction Techniques
     %
-    % The function expects the following correction parameters to be passed via varargin:
+    %   This function solves unconstrained optimization problems using
+    %   modified Newton's method with various Hessian correction
+    %   techniques to handle non-positive definite Hessians.
     %
-    % For 'spectral' correction (recomended):
-    %   - toleig: tolerance for the correction
+    %   Syntax:
+    %   [xk, fk, gradfk_norm, k, failure, flag, xseq, btseq, corrseq, fseq, gradnormseq] = ...
+    %       modifiedNM(f, gradf, Hessf, x0, kmax, tolgrad, ...
+    %       c1, rho, btmax, precond, h, specific_approx, hess_approx, correction_technique, varargin)
     %
-    % For 'thresh' correction:
-    %   - toleig: tolerance for the correction
+    %   Input Parameters:
+    %       - f                  : Function handle for the objective function.
+    %       - gradf              : Function handle for the gradient of the objective function.
+    %       - Hessf              : Function handle for the Hessian of the objective function (or empty for approximation).
+    %       - x0                 : Initial guess for the solution.
+    %       - kmax               : Maximum number of iterations.
+    %       - tolgrad            : Tolerance for the norm of the gradient.
+    %       - c1                 : Armijo condition parameter (0 < c1 < 1).
+    %       - rho                : Backtracking step reduction factor (0 < rho < 1).
+    %       - btmax              : Maximum number of backtracking steps.
+    %       - precond            : Boolean indicating whether to use preconditioning.
+    %       - h                  : Step size for numerical Hessian approximation (if needed).
+    %       - specific_approx    : Boolean indicating usage of gradient of f for exact Hessian approximation.
+    %       - hess_approx        : Function handle for Hessian approximation (ignored if Hessf is not empty).
+    %       - correction_technique : String specifying the correction method among {'spectral', 'thresh', 'diag', 'modLDL'}.
+    %       - varargin           : Additional parameters for the chosen correction technique.
     %
-    % For 'diag' correction:
-    %   - toleig: tolerance for the correction
-    %   - maxit:  maximum iterations allowed for the correction
+    %   Correction Parameters:
+    %       - 'spectral': Tolerance for spectral shifting ('toleig').
+    %       - 'thresh'  : Tolerance for eigenvalue thresholding ('toleig').
+    %       - 'diag'    : Tolerance and maximum iterations ('toleig', 'maxit').
+    %       - 'modLDL'  : Tolerance for modified LDL decomposition ('toleig').
     %
-    % For 'modLDL' correction:
-    %   - toleig: tolerance for the correction
+    %   Output Parameters:
+    %       - xk                 : Final solution vector.
+    %       - fk                 : Objective function value at the solution.
+    %       - gradfk_norm        : Norm of the gradient at the solution.
+    %       - k                  : Total number of iterations performed.
+    %       - failure            : Boolean indicating whether the method failed.
+    %       - flag               : Message describing the termination condition.
+    %       - xseq               : Sequence of solution vectors across iterations.
+    %       - btseq              : Sequence of backtracking step counts.
+    %       - corrseq            : Sequence of corrections applied to the Hessian.
+    %       - fseq               : Sequence of objective function values across iterations.
+    %       - gradnormseq        : Sequence of gradient norms across iterations.
+    %
+    %
+    %   Notes:
+    %       - If Hessf is empty, numerical approximation of the Hessian is used.
+    %       - Correction techniques preserve sparsity when applied.
     
     % Parse additional parameters from varargin
     correction_params = varargin;
@@ -66,6 +101,7 @@
 
     % Check whetere to use hessian approximation or not
     if isempty(Hessf)
+        % If specific_approx = true, the function will exploit the exact gradient of f
         Hessf = @(x) hess_approx(x, h, specific_approx, gradf, gradfk);
     end
     
@@ -90,7 +126,7 @@
             end
         end
 
-        % If no precodition is required, ignore it
+        % If no precodition is required, ignore it (overwrite the cholesky factorization with empty matrix)
         if ~precond
             R = [];
         end
@@ -107,6 +143,7 @@
         % Compute the value of f in the candidate new xk
         fnew = f(xnew);
 
+        % Backtracking auxiliar variables
         c1_gradfk_pk = c1 * gradfk' * pk;
         bt = 0;
         
@@ -138,7 +175,6 @@
             break;
         end
 
-
         % Update xk, fk, gradfk_norm
         xk = xnew;
         fk = fnew;
@@ -163,9 +199,9 @@
 
     % Flag output
     if ~failure
-        if gradfk_norm < tolgrad
+        if gradfk_norm < tolgrad % Newton method converged
             flag = sprintf('Satysfied the tollerance in %d iteration', k);
-        else
+        else % Newton method did not converge
             flag = sprintf(['Failure: mnm did %d iteration but did not converge. ' ...
                 'Norm of the gradient = %.3g'], k, gradfk_norm);
             failure = true;
