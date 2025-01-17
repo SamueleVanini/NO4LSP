@@ -1,19 +1,19 @@
-clear;
-clc;
-close all;
+close all; clear; clc;
 
 %% Add folders
+
 addpath('test_problems_for_unconstrained_optimization\');
 addpath("starting_points\");
 
-%% Variables Initialization
+%% Variables Initialization and tuning
+
 % Function + starting points
 % Choose among:
 %   'Ext_Rosenbrock.mat'
 %   'Ext_Powell.mat'
 %   'Problem_82.mat'
 % %
-load('Ext_Rosenbrock.mat');
+load('Problem_82.mat');
 
 % Outer loop
 max_iterations = 5000;
@@ -33,7 +33,7 @@ specific_approx = true;
 
 %  *** Correction tuning ***
 %   _______________________________________________________________________________________________________________________________________________________________________________________________
-%  |     |   'spectral'          succ runs (on 33)               |   'tresh'     succ runs (on 33)       |   NOTES                                                                                 |
+%  |     |   'spectral'          succ runs (on 33)               |   'thresh'     succ runs (on 33)      |   NOTES                                                                                 |
 %  |=====|=======================================================|=======================================|=========================================================================================|
 %  | ROS |   1e-4<, 350, 400      3, 8, 23  (converges to 0)     |                                       |   - at 350 3 standard + 5 point from n=1e3 converge,                                    |
 %  |     |                                                       |                                       |   - at 375 everything works for n=1e3, only for some n=1e4, unknown for 1e5 (too long)  |
@@ -44,8 +44,8 @@ specific_approx = true;
 %  | P82 |   1e-2<, 1e-1, 1      0, 3, 33  (converges to 0)      |                                       |                                                                                         |
 %  |_____|_______________________________________________________|_______________________________________|_________________________________________________________________________________________|
 
-correction_method = 'spectral';
-correction_parameters = 350;
+correction_method = 'thresh';
+correction_parameters = [];
 
 %% Choose points to analyze and plots to display
 
@@ -64,11 +64,11 @@ point = 1;
 % Stats
 tot_success = 3*length(point);
 
-% Plot to display
-plot_rate_convergence = true;
-plot_matrix_corrections = true;
-plot_function_convergence = true;
-plot_gradient_convergence = true;
+% Plots to display
+plot_rate_convergence       = true;
+plot_matrix_corrections     = true;
+plot_function_convergence   = true;
+plot_gradient_convergence   = true;
 
 %% Dimension 1000 (1e3)
 
@@ -105,7 +105,6 @@ for i = point
             gradient_convergence(gradnormseq, length(x_0));
         end
     end
-
 
     % Stats
     tot_success = tot_success - failure;
@@ -154,7 +153,9 @@ for i = point
 
     fprintf("\n\n");
 end
+
 %% Dimension 100000 (1e5)
+
 for i = point
     x_0 = x_100000(:, i);
 
@@ -195,7 +196,11 @@ for i = point
     fprintf("\n\n");
 end
 
+%% Print count of successful runs
+
 fprintf("Successful run: %d/%d\n", tot_success, 3*length(point));
+
+%% Plotting and Analysis Functions
 
 function print_output(flag, sol, f_x, norm_grad, iters, max_iters, time)
     fprintf("FLAG: %s\n", flag);
