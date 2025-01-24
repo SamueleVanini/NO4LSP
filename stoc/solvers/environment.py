@@ -17,12 +17,8 @@ class AirlineModel:
 
     @property
     def price_levels(self):
-        price_levels = [
-            self.min_price + nbin * ((self.max_price - self.min_price) / self.nbins_price)
-            for nbin in range(self.nbins_price)
-        ]
-        price_levels[0] = self.min_price + 1
-        price_levels[-1] = self.max_price - 1
+        d = (self.max_price - self.min_price) / self.nbins_price
+        price_levels = [d * nbin + self.min_price + (d / 2) for nbin in range(self.nbins_price)]
         return price_levels
 
     @property

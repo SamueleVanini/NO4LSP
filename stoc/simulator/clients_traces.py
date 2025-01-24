@@ -33,7 +33,7 @@ class CustomersSimulator:
 
     def generate_trace(self) -> list[Customer]:
 
-        time = 0
+        time = 1
         customers: list[Customer] = []
         lambd = self.distribution_params.get("lambd", 0.5)
         a = self.distribution_params.get("alpha", 0.5)
