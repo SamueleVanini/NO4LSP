@@ -33,8 +33,6 @@
     %   Correction Parameters:
     %       - 'spectral': Tolerance for spectral shifting ('toleig').
     %       - 'thresh'  : Tolerance for eigenvalue thresholding ('toleig').
-    %       - 'diag'    : Tolerance and maximum iterations ('toleig', 'maxit').
-    %       - 'modLDL'  : Tolerance for modified LDL decomposition ('toleig').
     %
     %   Output Parameters:
     %       - xk                 : Final solution vector.
@@ -66,10 +64,10 @@
             correction = @(X) spectral_shifting_correction(X, correction_params{:});
         case 'thresh'
             correction = @(X) eigenvalue_thresholding_correction(X, correction_params{:});
-        case 'diag'
-            correction = @(X) diagonal_loading_correction(X, correction_params{:});
-        case 'modLDL'
-            correction = @(X) modified_ldl_correction(X, correction_params{:});
+        % case 'diag'
+        %     correction = @(X) diagonal_loading_correction(X, correction_params{:});
+        % case 'modLDL'
+        %     correction = @(X) modified_ldl_correction(X, correction_params{:});
         otherwise
             error('Unknown correction technique: %s', correction_technique);
     end

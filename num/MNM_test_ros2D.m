@@ -38,29 +38,35 @@ Hessf = @(x) rosenbrock_hess(x);
 %% Test the Modified Newton's Method - Starting Point 1
 fprintf('Test with starting point x0 = [%f, %f]\n', x0_1);
 
+tic;
 [xk1, fk1, gradfk_norm1, k1, failure1, flag1, xseq1, btseq1, corrseq1] = ...
     modifiedNM(f, gradf, Hessf, x0_1, kmax, tolgrad, ...
         c1, rho, btmax, do_precondintioning, h_approximation, specific_approx, hess_approx, 'spectral');
+execution_time = toc;
 
 %% Display results
 fprintf('Final Point: [%f, %f]\n', xk1(1), xk1(2));
 fprintf('Function Value: %e\n', fk1);
 fprintf('Gradient Norm: %e\n', gradfk_norm1);
 fprintf('Iterations: %d\n', k1);
+fprintf('Execution time: %f s\n', execution_time);
 fprintf('\n');
 
 %% Test the Modified Newton's Method - Starting Point 2
 fprintf('Test with starting point x0 = [%f, %f]\n', x0_2);
 
+tic;
 [xk2, fk2, gradfk_norm2, k2, failure2, flag2, xseq2, btseq2, corrseq2] = ...
     modifiedNM(f, gradf, Hessf, x0_2, kmax, tolgrad, ...
         c1, rho, btmax, do_precondintioning, h_approximation, specific_approx, hess_approx, 'spectral');
+execution_time = toc;
 
 %% Display results
 fprintf('Final Point: [%f, %f]\n', xk2(1), xk2(2));
 fprintf('Function Value: %e\n', fk2);
 fprintf('Gradient Norm: %e\n', gradfk_norm2);
 fprintf('Iterations: %d\n', k2);
+fprintf('Execution time: %f s\n', execution_time);
 fprintf('\n');
 
 %% Surface Plot and Contour Lines
@@ -75,27 +81,27 @@ x2_vals = -1:0.1:3;
 F_vals = arrayfun(@(x1, x2) f([x1; x2]), X1, X2);
 
 % Surface plot
-subplot(1, 2, 1);
 surf(X1, X2, F_vals, 'EdgeColor', 'none');
 hold on;
 plot3(xseq1(1, :), xseq1(2, :), arrayfun(@(i) f(xseq1(:, i)), 1:size(xseq1, 2)), ...
       '-rx', 'LineWidth', 2);
 plot3(xseq2(1, :), xseq2(2, :), arrayfun(@(i) f(xseq2(:, i)), 1:size(xseq2, 2)), ...
-      '-bx', 'LineWidth', 2);
+      '-bx', 'LineWidth', 2, 'Color', 'green');
 title('Surface Plot with Iterates');
 xlabel('x_1'); ylabel('x_2'); zlabel('f(x)');
-legend({'Function surface', 'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
-grid on; view(45, 30);
+legend({'Function surface', 'Starting Point x0', 'Starting Point x1'}, 'Location', 'NorthEast');
+grid on;
+
+figure;
 
 % Contour plot
-subplot(1, 2, 2);
 contour(X1, X2, F_vals, 20, 'LineWidth', 1.5);
 hold on;
 plot(xseq1(1, :), xseq1(2, :), '-rx', 'LineWidth', 2);
 plot(xseq2(1, :), xseq2(2, :), '-bx', 'LineWidth', 2);
 title('Contour Plot with Iterates');
 xlabel('x_1'); ylabel('x_2');
-legend({'Function contour lines', 'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
+legend({'Function contour lines', 'Starting Point x0', 'Starting Point x1'}, 'Location', 'NorthEast');
 grid on;
 
 %% Bar Plot for Backtracking Steps
@@ -116,7 +122,7 @@ bar(bar_data', 'grouped'); % Transpose for grouped display
 title('Backtracking Steps per Iteration');
 xlabel('Iteration');
 ylabel('Number of Backtracking Loops');
-legend({'Starting Point 1', 'Starting Point 2'}, 'Location', 'NorthEast');
+legend({'Starting Point x0', 'Starting Point x1'}, 'Location', 'NorthEast');
 grid on;
 
 %% Plot the Iterates

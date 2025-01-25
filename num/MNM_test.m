@@ -7,11 +7,11 @@ addpath("starting_points\");
 
 %% Variables Initialization and tuning
 
-% Function + starting points
+% *** Function + starting points ***
 % Choose among:
+%   'Problem_82.mat'
 %   'Ext_Rosenbrock.mat'
 %   'Ext_Powell.mat'
-%   'Problem_82.mat'
 % %
 load('Problem_82.mat');
 
@@ -32,20 +32,26 @@ h_approximation = 1e-12;
 specific_approx = true;
 
 %  *** Correction tuning ***
-%   _______________________________________________________________________________________________________________________________________________________________________________________________
-%  |     |   'spectral'          succ runs (on 33)               |   'thresh'     succ runs (on 33)      |   NOTES                                                                                 |
-%  |=====|=======================================================|=======================================|=========================================================================================|
-%  | ROS |   1e-4<, 350, 400      3, 8, 23  (converges to 0)     |                                       |   - at 350 3 standard + 5 point from n=1e3 converge,                                    |
-%  |     |                                                       |                                       |   - at 375 everything works for n=1e3, only for some n=1e4, unknown for 1e5 (too long)  |
-%  |     |                                                       |                                       |   - Long time to run some points (x_6, x_7, x_9, x10, x_11) for 375                     |
-%  |_____|_______________________________________________________|_______________________________________|_________________________________________________________________________________________|
-%  | POW |   1e8<, 1e9           3 (to 0), to_try (not to 0)     |                                       |                                                                                         |
-%  |_____|_______________________________________________________|_______________________________________|_________________________________________________________________________________________|
-%  | P82 |   1e-2<, 1e-1, 1      0, 3, 33  (converges to 0)      |                                       |                                                                                         |
-%  |_____|_______________________________________________________|_______________________________________|_________________________________________________________________________________________|
+% Problem 82:
+% - 'spectral': 1e-2<, 1e-1, 1 with success runs 0, 3, 33 (converges to 0).
+% - 'thresh': 1e-8.
+%
+% Extended Rosenbrock:
+% - 'spectral': 1e-4<, 350, 400 with success runs 3, 8, 23 (converges to 0).
+% - 'thresh': 1e-8.
+% - NOTES:
+%   - At 350, 3 standard + 5 points from n=1e3 converge.
+%   - At 375, everything works for n=1e3, but only for some n=1e4. Unknown for n=1e5 (too long).
+%   - Long runtime for some points (x_6, x_7, x_9, x_10, x_11) at 375.
+%
+% Extended Powell:
+% - 'spectral': 1e-8< with success runs 3 (converges to 0).
+% - 'thresh': 1e-8.
 
-correction_method = 'thresh';
-correction_parameters = [];
+correction_method = 'spectral';
+correction_parameters = 1;
+
+fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correction_method, correction_parameters);
 
 %% Choose points to analyze and plots to display
 
@@ -59,7 +65,7 @@ correction_parameters = [];
 %   e.g. 1:4    will run the default point + first 3 randomly generated
 %        2:4    will run first 3 randomly generated
 %        1:11   will run all point (defualt + the 10 randomly generated)
-point = 1;
+point = 1:2;
 
 % Stats
 tot_success = 3*length(point);
@@ -76,12 +82,12 @@ for i = point
     x_0 = x_1000(:, i);
 
     fprintf("PROBLEM DIMENSION: %.1e\n", length(x_0));
-    fprintf("x_%d = ", i); print_summary(x_0);
+    fprintf("x_%d = ", i-1); print_summary(x_0);
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
         x_sequence, backtrack_sequence, corr_sequence, fseq, gradnormseq] = ...
-    modifiedNM(f, grad_f, [], x_0, max_iterations, ...
+    modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
         h_approximation, specific_approx, hess_approx, correction_method, correction_parameters);
     execution_time = toc;
@@ -118,12 +124,12 @@ for i = point
     x_0 = x_10000(:, i);
 
     fprintf("PROBLEM DIMENSION: %.1e\n", length(x_0));
-    fprintf("x_%d = ", i); print_summary(x_0);
+    fprintf("x_%d = ", i-1); print_summary(x_0);
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
         x_sequence, backtrack_sequence, corr_sequence, fseq, gradnormseq] = ...
-    modifiedNM(f, grad_f, [], x_0, max_iterations, ...
+    modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
         h_approximation, specific_approx, hess_approx, correction_method, correction_parameters);
     execution_time = toc;
@@ -160,12 +166,12 @@ for i = point
     x_0 = x_100000(:, i);
 
     fprintf("PROBLEM DIMENSION: %.1e\n", length(x_0));
-    fprintf("x_%d = ", i); print_summary(x_0);
+    fprintf("x_%d = ", i-1); print_summary(x_0);
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
         x_sequence, backtrack_sequence, corr_sequence, fseq, gradnormseq] = ...
-    modifiedNM(f, grad_f, [], x_0, max_iterations, ...
+    modifiedNM(f, grad_f, hess_f, x_0, max_iterations, ...
         tollerance, c1, rho, max_back_iterations, do_precondintioning, ...
         h_approximation, specific_approx, hess_approx, correction_method, correction_parameters);
     execution_time = toc;

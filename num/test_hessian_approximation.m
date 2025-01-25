@@ -4,6 +4,8 @@ clc;
 
 %% Setup
 
+addpath('test_problems_for_unconstrained_optimization\')
+
 % 500 random points
 rng(0);
 n_points = 1000;
