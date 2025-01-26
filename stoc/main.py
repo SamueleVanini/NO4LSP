@@ -11,14 +11,10 @@ from solvers.environment import AirlineModel
 MAX_TICKETS = 100
 MAX_PRICE = 350
 MIN_PRICE = 50
-discout_factor = 0.5
-theta = 0.01
-
-ticket_left: int = MAX_TICKETS
-ticket_sold: int = floor((MAX_PRICE - MIN_PRICE) / 10)
-demand: int = 10
-days_left: int = 30
-seat_fixed_cost = -50
+DISCOUNT_FACTOR = 0.5
+NBINS: int = 10
+DAYS_LEFT: int = 30
+SEAT_FIXED_COST = -50
 
 distributions_params: dict[str, float] = {"lambd": 20, "alpha": 2, "beta": 2}
 
@@ -40,7 +36,7 @@ def eval_policy(
     policy: dict[tuple[int, int, int], int],
     customers: list[Customer],
     model: AirlineModel,
-    initial_price_bin: int = demand - 1,
+    initial_price_bin: int = NBINS - 1,
 ):
     ticket_left = MAX_TICKETS
     price_bin = initial_price_bin
@@ -48,7 +44,7 @@ def eval_policy(
     tot_ticket_sold = 0
     steps = []
 
-    for day in range(days_left, 0, -1):
+    for day in range(DAYS_LEFT, 0, -1):
         ticket_sold = 0
         price = model.price_levels[price_bin]
         for customer in customers:
@@ -107,12 +103,12 @@ if __name__ == "__main__":
     if LOAD:
         customers, sim = load_trace(file_path)
     else:
-        customers, sim = sim_trace(file_path, days_left)
-    model = AirlineModel(MAX_TICKETS, days_left, MIN_PRICE, MAX_PRICE, demand, seat_fixed_cost)
-    agent = Agent(discout_factor, theta, model, distributions_params)
+        customers, sim = sim_trace(file_path, DAYS_LEFT)
+    model = AirlineModel(MAX_TICKETS, DAYS_LEFT, MIN_PRICE, MAX_PRICE, NBINS, SEAT_FIXED_COST)
+    agent = Agent(DISCOUNT_FACTOR, model, distributions_params)
     agent.solve()
     policy = agent.get_policy()
-    init_bin = agent.V[MAX_TICKETS, :, days_left].argmax()
+    init_bin = agent.V[MAX_TICKETS, :, DAYS_LEFT].argmax()
     ticket_sold, revenue, steps = eval_policy(policy, customers, model, init_bin)  # type: ignore
     print(f"sold {ticket_sold} tickets, total revenue: {revenue}")
     plot_steps(steps, model)
