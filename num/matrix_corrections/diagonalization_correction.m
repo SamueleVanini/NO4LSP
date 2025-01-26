@@ -1,4 +1,4 @@
-function Bk = eigenvalue_thresholding_correction(Hk, toleig)
+function Bk = diagonalization_correction(Hk, toleig)
     % Function to apply eigenvalue thresholding correction while preserving sparsity
 
     if nargin < 2 || isempty(toleig) % Set default value for toleig

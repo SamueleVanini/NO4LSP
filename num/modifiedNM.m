@@ -27,12 +27,12 @@
     %       - h                  : Step size for numerical Hessian approximation (if needed).
     %       - specific_approx    : Boolean indicating usage of gradient of f for exact Hessian approximation.
     %       - hess_approx        : Function handle for Hessian approximation (ignored if Hessf is not empty).
-    %       - correction_technique : String specifying the correction method among {'spectral', 'thresh'}.
+    %       - correction_technique : String specifying the correction method among {'minima', 'diag'}.
     %       - varargin           : Additional parameters for the chosen correction technique.
     %
     %   Correction Parameters:
-    %       - 'spectral': Tolerance for spectral shifting ('toleig').
-    %       - 'thresh'  : Tolerance for eigenvalue thresholding ('toleig').
+    %       - 'minima': Tolerance for minimal eigenvalue correction ('toleig').
+    %       - 'diag'  : Tolerance for diagonalization correction ('toleig').
     %
     %   Output Parameters:
     %       - xk                 : Final solution vector.
@@ -60,10 +60,10 @@
 
     % Define function handle for correction, based on the user choice
     switch correction_technique
-        case 'spectral'
-            correction = @(X) spectral_shifting_correction(X, correction_params{:});
-        case 'thresh'
-            correction = @(X) eigenvalue_thresholding_correction(X, correction_params{:});
+        case 'minima'
+            correction = @(X) minimal_eigenvalue_correction(X, correction_params{:});
+        case 'diag'
+            correction = @(X) diagonalization_correction(X, correction_params{:});
         otherwise
             error('Unknown correction technique: %s', correction_technique);
     end
@@ -95,7 +95,7 @@
 
     % Check whetere to use hessian approximation or not
     if isempty(Hessf)
-        % If specific_approx = true, the function will exploit the exact gradient of f
+        % If specific_approx = true, the function will exploit the approximatio on h * abs(xk)
         Hessf = @(x) hess_approx(x, h, specific_approx, gradf, gradfk);
     end
     

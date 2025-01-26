@@ -1,4 +1,4 @@
-function Bk = spectral_shifting_correction(Hk, toleig)
+function Bk = minimal_eigenvalue_correction(Hk, toleig)
     % Function to apply spectral shifting correction while preserving sparsity
 
     if nargin < 2 || isempty(toleig) % Set default value for toleig

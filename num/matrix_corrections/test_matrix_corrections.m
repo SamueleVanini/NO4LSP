@@ -10,8 +10,8 @@ gamma = []; % Scaling factor for diagonal loading
 beta = 0.1; % Regularization parameter for modified LDL decomposition
 delta = 1e-6; % Regularization parameter for modified LDL decomposition
 
-Bk_spectral = spectral_shifting_correction(H, toleig);
-Bk_tresh = eigenvalue_thresholding_correction(H, toleig);
+Bk_spectral = minimal_eigenvalue_correction(H, toleig);
+Bk_tresh = diagonalization_correction(H, toleig);
 Bk_diag = diagonal_loading_correction(H, gamma, toleig);
 Bk_modLDL = modified_ldl_correction(H, beta, delta);
 
@@ -21,11 +21,11 @@ disp(H);
 fprintf('Is H Positive Definite? %s\n', is_positive_definite(H));
 fprintf('\n\n');
 
-disp('Spectral Shifting Correction:');
+disp('Minimal Eigenvalue Correction:');
 display_and_check(H, Bk_spectral);
 fprintf('\n\n');
 
-disp('Eigenvalue Thresholding Correction:');
+disp('Diagonalization Correction:');
 display_and_check(H, Bk_tresh);
 fprintf('\n\n');
 

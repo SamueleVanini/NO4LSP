@@ -48,7 +48,7 @@ specific_approx = true;
 % - 'spectral': 1e-8< with success runs 3 (converges to 0).
 % - 'thresh':   1e-8
 
-correction_method = 'spectral';
+correction_method = 'spectral'; % Use among 'minima', 'diag'
 correction_parameters = 400;
 
 fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correction_method, correction_parameters);
