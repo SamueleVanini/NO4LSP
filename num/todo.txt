@@ -1,3 +1,0 @@
-- [ ] Controllo per ogni for del codice, sostituire con operazioni algebriche
-- [ ] Ricontrollino risultati
-- [ ] Report

@@ -13,7 +13,7 @@ addpath("starting_points\");
 %   'Ext_Rosenbrock.mat'
 %   'Ext_Powell.mat'
 % % % 
-load('Ext_Rosenbrock.mat');
+load('Problem_82.mat');
 
 % Outer loop
 max_iterations = 5000;
@@ -33,22 +33,22 @@ specific_approx = true;
 
 %  *** Correction tuning ***
 % Problem 82:
-% - 'spectral': 1e-2<, 1e-1, 1 with success runs 0, 3, 33 (converges to 0).
-% - 'thresh':   1e-8
+% - 'minima': 1e-2<, 1e-1, 1 with success runs 0, 3, 33 (converges to 0).
+% - 'diag':   1e-8
 %
 % Extended Rosenbrock:
-% - 'spectral': 1e-4<, 350, 400 with success runs 3, 8, 23 (converges to 0).
-% - 'thresh':   1e-8
+% - 'minima': 1e-4<, 350, 400 with success runs 3, 8, 23 (converges to 0).
+% - 'diag':   1e-8
 % - NOTES:
 %   - At 350, 3 standard + 5 points from n=1e3 converge.
 %   - At 375, everything works for n=1e3, but only for some n=1e4. Unknown for n=1e5 (too long).
 %   - Long runtime for some points (x_6, x_7, x_9, x_10, x_11) at 375.
 %
 % Extended Powell:
-% - 'spectral': 1e-8< with success runs 3 (converges to 0).
-% - 'thresh':   1e-8
+% - 'minima': 1e-8< with success runs 3 (converges to 0).
+% - 'diag':   1e-8
 
-correction_method = 'spectral'; % Use among 'minima', 'diag'
+correction_method = 'minima'; % Use among 'minima', 'diag'
 correction_parameters = 400;
 
 fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correction_method, correction_parameters);
