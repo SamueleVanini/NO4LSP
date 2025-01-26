@@ -5,12 +5,8 @@ function Bk = minimal_eigenvalue_correction(Hk, toleig)
         toleig = 1e-8;
     end
 
-    if ~issymmetric(Hk) % Check if the matrix is symmetric
-        error('Matrix is not symmetric');
-    end
-
     % Compute the smallest eigenvalue
-    min_eig = eigs(Hk, 1, 'smallestabs', 'IsSymmetricDefinite', false, 'tol', 1e-8, 'MaxIterations', 500); 
+    min_eig = eigs(Hk, 1, 'smallestreal', 'IsSymmetricDefinite', false, 'tol', 1e-8, 'MaxIterations', 500); 
 
     % Compute the correction term
     tauk = max(0, toleig - min_eig); 

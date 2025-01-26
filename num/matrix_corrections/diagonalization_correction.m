@@ -5,10 +5,6 @@ function Bk = diagonalization_correction(Hk, toleig)
         toleig = 1e-8;
     end
 
-    if ~issymmetric(Hk) % Check if the matrix is symmetric
-        error('Matrix is not symmetric');
-    end
-
     n = size(Hk, 1);
 
     % Compute eigendecomposition (use eigs() - rather than eig() - with size of Hk since we need *all* eigenvalues, note: eig() with sparse matrices can't return eigenvectors)

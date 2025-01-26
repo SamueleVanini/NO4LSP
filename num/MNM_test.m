@@ -13,7 +13,7 @@ addpath("starting_points\");
 %   'Ext_Rosenbrock.mat'
 %   'Ext_Powell.mat'
 % % % 
-load('Problem_82.mat');
+load('Ext_Rosenbrock.mat');
 
 % Outer loop
 max_iterations = 5000;
@@ -25,11 +25,16 @@ c1 = 1e-4;
 rho = .5;
 
 % PCG preconditioning
-do_precondintioning = true;
+do_precondintioning = false;
 
 % Hessian approximation
 h_approximation = 1e-12;
-specific_approx = true;
+specific_approx = false;
+
+hess_approx = false;
+if hess_approx
+    hess_f = [];
+end
 
 %  *** Correction tuning ***
 % Problem 82:
@@ -49,7 +54,7 @@ specific_approx = true;
 % - 'diag':   1e-8
 
 correction_method = 'minima'; % Use one among 'minima', 'diag'
-correction_parameters = 400;
+correction_parameters = 1e-8;
 
 fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correction_method, correction_parameters);
 
@@ -63,18 +68,18 @@ fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correct
 % Multiple points can be run, just by setting variable 
 % 'point' as a list that ranges between integers
 %   e.g. 1:4    will run the default point + first 3 randomly generated
-%        2:4    will run first 3 randomly generated
-%        1:11   will run all point (defualt + the 10 randomly generated)
-point = 1:11;
+%        2:4    will run all point (defualt + the 10 randomly generated)l run first 3 randomly generated
+%        1:11   wil
+point = 1:2;
 
 % Stats
 tot_success = 3*length(point);
 
 % Plots to display
-plot_rate_convergence       = true;
+plot_rate_convergence       = false;
 plot_matrix_corrections     = true;
-plot_function_convergence   = true;
-plot_gradient_convergence   = true;
+plot_function_convergence   = false;
+plot_gradient_convergence   = false;
 
 %% Dimension 1000 (1e3)
 
