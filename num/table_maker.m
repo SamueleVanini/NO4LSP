@@ -8,7 +8,7 @@ addpath('test_problems_for_unconstrained_optimization\');
 addpath("starting_points\");
 
 % Function
-func_name = 'Ext_Rosenbrock';
+func_name = 'Problem_82';
 
 func_file = sprintf("%s.mat", func_name);
 load(func_file);
@@ -35,15 +35,14 @@ if do_hess_approx
 end
 
 point = 1:11;
-
-% Stats
-tot_success = 3*length(point);
+caption = 'ciaone';
+label = 'salvino';
 
 disp("\begin{table}");
 disp("\centering");
 disp("\resizebox{\linewidth}{!}{");
 disp("\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|} \cline{2-13}");
-disp("\multicolumn{1}{l|}{} & \multicolumn{3}{l|}{Function Value} & \multicolumn{3}{l|}{Norm of Gradient} & \multicolumn{3}{l|}{Iterations} & \multicolumn{3}{l|}{Execution Time} \\ \cline{2-13}");
+disp("\multicolumn{1}{l|}{} & \multicolumn{3}{l|}{Function Value} & \multicolumn{3}{l|}{Norm of Gradient} & \multicolumn{3}{l|}{Iterations} & \multicolumn{3}{l|}{Execution Time (seconds)} \\ \cline{2-13}");
 disp("\multicolumn{1}{l|}{} & $10^3$ & $10^4$ & $10^5$ & $10^3$ & $10^4$ & $10^5$ & $10^3$ & $10^4$ & $10^5$ & $10^3$ & $10^4$ & $10^5$ \\ \hline");
 
 for i = point
@@ -82,4 +81,4 @@ for i = point
     fprintf("\\hline\n");
 end
 
-fprintf("\\end{tabular}\n}\n\\caption{ciao}\n\\label{table: salve}\n\\end{table}\n");
+fprintf("\\end{tabular}\n}\n\\caption{%s}\n\\label{table: %s}\n\\end{table}\n", caption, label);
