@@ -27,7 +27,7 @@
     %       - h                  : Step size for numerical Hessian approximation (if needed).
     %       - specific_approx    : Boolean indicating usage of gradient of f for exact Hessian approximation.
     %       - hess_approx        : Function handle for Hessian approximation (ignored if Hessf is not empty).
-    %       - correction_technique : String specifying the correction method among {'spectral', 'thresh', 'diag', 'modLDL'}.
+    %       - correction_technique : String specifying the correction method among {'spectral', 'thresh'}.
     %       - varargin           : Additional parameters for the chosen correction technique.
     %
     %   Correction Parameters:
@@ -64,10 +64,6 @@
             correction = @(X) spectral_shifting_correction(X, correction_params{:});
         case 'thresh'
             correction = @(X) eigenvalue_thresholding_correction(X, correction_params{:});
-        % case 'diag'
-        %     correction = @(X) diagonal_loading_correction(X, correction_params{:});
-        % case 'modLDL'
-        %     correction = @(X) modified_ldl_correction(X, correction_params{:});
         otherwise
             error('Unknown correction technique: %s', correction_technique);
     end

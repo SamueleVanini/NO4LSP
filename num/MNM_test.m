@@ -12,8 +12,8 @@ addpath("starting_points\");
 %   'Problem_82.mat'
 %   'Ext_Rosenbrock.mat'
 %   'Ext_Powell.mat'
-% %
-load('Problem_82.mat');
+% % % 
+load('Ext_Rosenbrock.mat');
 
 % Outer loop
 max_iterations = 5000;
@@ -34,11 +34,11 @@ specific_approx = true;
 %  *** Correction tuning ***
 % Problem 82:
 % - 'spectral': 1e-2<, 1e-1, 1 with success runs 0, 3, 33 (converges to 0).
-% - 'thresh': 1e-8.
+% - 'thresh':   1e-8
 %
 % Extended Rosenbrock:
 % - 'spectral': 1e-4<, 350, 400 with success runs 3, 8, 23 (converges to 0).
-% - 'thresh': 1e-8.
+% - 'thresh':   1e-8
 % - NOTES:
 %   - At 350, 3 standard + 5 points from n=1e3 converge.
 %   - At 375, everything works for n=1e3, but only for some n=1e4. Unknown for n=1e5 (too long).
@@ -46,10 +46,10 @@ specific_approx = true;
 %
 % Extended Powell:
 % - 'spectral': 1e-8< with success runs 3 (converges to 0).
-% - 'thresh': 1e-8.
+% - 'thresh':   1e-8
 
 correction_method = 'spectral';
-correction_parameters = 1;
+correction_parameters = 400;
 
 fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correction_method, correction_parameters);
 
@@ -65,7 +65,7 @@ fprintf("*** USING CORRECTION METHOD: %s WITH TOLLERANCE %.1e *** \n\n", correct
 %   e.g. 1:4    will run the default point + first 3 randomly generated
 %        2:4    will run first 3 randomly generated
 %        1:11   will run all point (defualt + the 10 randomly generated)
-point = 1:2;
+point = 1:11;
 
 % Stats
 tot_success = 3*length(point);
