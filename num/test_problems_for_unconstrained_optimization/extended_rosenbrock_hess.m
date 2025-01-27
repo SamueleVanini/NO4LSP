@@ -13,21 +13,23 @@ function HessF = extended_rosenbrock_hess(x)
         error('Input dimension n must be even for the Hessian of the Extended Rosenbrock function.');
     end
     
-    % Initialize the diagonals vector
-    main_diag = 100*ones(n, 1); % half of them are already 100
-    off_diag = zeros(n - 1, 1); % half of them are already 0
+    % Initialize the diagonals vectors
+    main_diag = 100*ones(n, 1); % Note: Half of main diagonal entries them are 100 by defintion (see later)
+    off_diag = zeros(n - 1, 1); % Note: Half of off-diagonal entries are 0 by definition (see later)
     
     for i = 1:2:n-1
-        k = i; % odd
+
+        k = i; % (odd)
         main_diag(k) = 600*x(k)^2 - 200*x(k+1) + 1;
         off_diag(k) = -200*x(k);
 
-    % -- Already set, by definition --
-        % k = i+1; % even
+        % Values for k=i+1 are already set before loop starts
+        % k = i+1; % (even)
         % main_diag(k) = 100;
-        % off_diag(k) = 0;
+        % off_diag(k)  = 0;
     end
 
+    % Build a sparse matrix
     Bin = [[off_diag; 0], main_diag, [0; off_diag]];
     HessF = spdiags(Bin, [-1 0 1], n, n);    
 end

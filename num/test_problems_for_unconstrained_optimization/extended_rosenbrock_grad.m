@@ -19,11 +19,11 @@ function gradF = extended_rosenbrock_grad(x)
     % Compute the gradient in pairs
     for i = 1:2:n-1
         
-        % Gradient w.r.t. x_i (odd index)
+        % Gradient w.r.t. x_i (odd)
         k = i; % always odd
         gradF(k) = 200*x(k)^3 - 200*x(k)*x(k+1) + x(k) - 1;
         
-        % Gradient w.r.t. x_{i+1} (even index)
+        % Gradient w.r.t. x_{i+1} (even)
         k = i+1; % always even
         gradF(k) = 100*(x(k) - x(k-1)^2);
     end

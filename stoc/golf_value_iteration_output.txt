@@ -1,0 +1,568 @@
+
+========================================
+Legend of Symbols Used:
+========================================
+V(s): Value function for state s
+Q(s, a): Action-value function for state s and action a
+Policy(s): Optimal policy for state s
+Delta: Maximum change in value function in an iteration
+========================================
+
+
+========================================
+MDP Components:
+========================================
+States: ['Fairway', 'Green', 'Hole']
+
+Actions: ['Hit to Fairway', 'Hit to Green', 'Hit in Hole']
+
+Transition Probabilities:
+  State: Fairway
+    Action: Hit to Fairway
+      Next State: Fairway, Probability: 1.0
+    Action: Hit to Green
+      Next State: Fairway, Probability: 0.1
+      Next State: Green, Probability: 0.9
+    Action: Hit in Hole
+      Next State: Fairway, Probability: 0.2
+      Next State: Green, Probability: 0.8
+  State: Green
+    Action: Hit to Fairway
+      Next State: Fairway, Probability: 0.9
+      Next State: Green, Probability: 0.1
+    Action: Hit to Green
+      Next State: Green, Probability: 0.7
+      Next State: Hole, Probability: 0.3
+    Action: Hit in Hole
+      Next State: Green, Probability: 0.4
+      Next State: Hole, Probability: 0.6
+  State: Hole
+    Action: Hit in Hole
+      Next State: Hole, Probability: 1.0
+
+Rewards:
+  State: Fairway
+    Action: Hit to Fairway, Reward: 0
+    Action: Hit to Green, Reward: 0
+    Action: Hit in Hole, Reward: 0
+  State: Green
+    Action: Hit to Fairway, Reward: 0
+    Action: Hit to Green, Reward: 0
+    Action: Hit in Hole, Reward: 10
+  State: Hole
+    Action: Hit in Hole, Reward: 0
+
+Gamma: 0.9
+Theta: 1e-05
+========================================
+
+
+****************************************
+*********** Iteration 1 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 0.0000
+Q(Fairway, Hit to Green) = 0.0000
+Q(Fairway, Hit in Hole) = 0.0000
+
+V(Fairway) updated to 0.0000
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 0.0000
+Q(Green, Hit to Green) = 0.0000
+Q(Green, Hit in Hole) = 10.0000
+
+V(Green) updated to 10.0000
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 10.000000
+****************************************
+
+
+****************************************
+*********** Iteration 2 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 0.0000
+Q(Fairway, Hit to Green) = 8.1000
+Q(Fairway, Hit in Hole) = 7.2000
+
+V(Fairway) updated to 8.1000
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 7.4610
+Q(Green, Hit to Green) = 6.3000
+Q(Green, Hit in Hole) = 13.6000
+
+V(Green) updated to 13.6000
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 8.100000
+****************************************
+
+
+****************************************
+*********** Iteration 3 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 7.2900
+Q(Fairway, Hit to Green) = 11.7450
+Q(Fairway, Hit in Hole) = 11.2500
+
+V(Fairway) updated to 11.7450
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 10.7375
+Q(Green, Hit to Green) = 8.5680
+Q(Green, Hit in Hole) = 14.8960
+
+V(Green) updated to 14.8960
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 3.645000
+****************************************
+
+
+****************************************
+*********** Iteration 4 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 10.5705
+Q(Fairway, Hit to Green) = 13.1228
+Q(Fairway, Hit in Hole) = 12.8392
+
+V(Fairway) updated to 13.1228
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 11.9701
+Q(Green, Hit to Green) = 9.3845
+Q(Green, Hit in Hole) = 15.3626
+
+V(Green) updated to 15.3626
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 1.377810
+****************************************
+
+
+****************************************
+*********** Iteration 5 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 11.8105
+Q(Fairway, Hit to Green) = 13.6247
+Q(Fairway, Hit in Hole) = 13.4231
+
+V(Fairway) updated to 13.6247
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.4187
+Q(Green, Hit to Green) = 9.6784
+Q(Green, Hit in Hole) = 15.5305
+
+V(Green) updated to 15.5305
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.501917
+****************************************
+
+
+****************************************
+*********** Iteration 6 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.2623
+Q(Fairway, Hit to Green) = 13.8059
+Q(Fairway, Hit in Hole) = 13.6344
+
+V(Fairway) updated to 13.8059
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.5806
+Q(Green, Hit to Green) = 9.7842
+Q(Green, Hit in Hole) = 15.5910
+
+V(Green) updated to 15.5910
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.181221
+****************************************
+
+
+****************************************
+*********** Iteration 7 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.4254
+Q(Fairway, Hit to Green) = 13.8712
+Q(Fairway, Hit in Hole) = 13.7106
+
+V(Fairway) updated to 13.8712
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6389
+Q(Green, Hit to Green) = 9.8223
+Q(Green, Hit in Hole) = 15.6128
+
+V(Green) updated to 15.6128
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.065288
+****************************************
+
+
+****************************************
+*********** Iteration 8 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.4841
+Q(Fairway, Hit to Green) = 13.8947
+Q(Fairway, Hit in Hole) = 13.7380
+
+V(Fairway) updated to 13.8947
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6599
+Q(Green, Hit to Green) = 9.8360
+Q(Green, Hit in Hole) = 15.6206
+
+V(Green) updated to 15.6206
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.023508
+****************************************
+
+
+****************************************
+*********** Iteration 9 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5053
+Q(Fairway, Hit to Green) = 13.9032
+Q(Fairway, Hit in Hole) = 13.7479
+
+V(Fairway) updated to 13.9032
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6675
+Q(Green, Hit to Green) = 9.8410
+Q(Green, Hit in Hole) = 15.6234
+
+V(Green) updated to 15.6234
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.008463
+****************************************
+
+
+****************************************
+*********** Iteration 10 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5129
+Q(Fairway, Hit to Green) = 13.9063
+Q(Fairway, Hit in Hole) = 13.7514
+
+V(Fairway) updated to 13.9063
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6702
+Q(Green, Hit to Green) = 9.8428
+Q(Green, Hit in Hole) = 15.6244
+
+V(Green) updated to 15.6244
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.003047
+****************************************
+
+
+****************************************
+*********** Iteration 11 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5156
+Q(Fairway, Hit to Green) = 13.9074
+Q(Fairway, Hit in Hole) = 13.7527
+
+V(Fairway) updated to 13.9074
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6712
+Q(Green, Hit to Green) = 9.8434
+Q(Green, Hit in Hole) = 15.6248
+
+V(Green) updated to 15.6248
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.001097
+****************************************
+
+
+****************************************
+*********** Iteration 12 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5166
+Q(Fairway, Hit to Green) = 13.9077
+Q(Fairway, Hit in Hole) = 13.7532
+
+V(Fairway) updated to 13.9077
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6715
+Q(Green, Hit to Green) = 9.8436
+Q(Green, Hit in Hole) = 15.6249
+
+V(Green) updated to 15.6249
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.000395
+****************************************
+
+
+****************************************
+*********** Iteration 13 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5170
+Q(Fairway, Hit to Green) = 13.9079
+Q(Fairway, Hit in Hole) = 13.7533
+
+V(Fairway) updated to 13.9079
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6716
+Q(Green, Hit to Green) = 9.8437
+Q(Green, Hit in Hole) = 15.6250
+
+V(Green) updated to 15.6250
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.000142
+****************************************
+
+
+****************************************
+*********** Iteration 14 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5171
+Q(Fairway, Hit to Green) = 13.9079
+Q(Fairway, Hit in Hole) = 13.7534
+
+V(Fairway) updated to 13.9079
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6717
+Q(Green, Hit to Green) = 9.8437
+Q(Green, Hit in Hole) = 15.6250
+
+V(Green) updated to 15.6250
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.000051
+****************************************
+
+
+****************************************
+*********** Iteration 15 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5171
+Q(Fairway, Hit to Green) = 13.9080
+Q(Fairway, Hit in Hole) = 13.7534
+
+V(Fairway) updated to 13.9080
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6717
+Q(Green, Hit to Green) = 9.8437
+Q(Green, Hit in Hole) = 15.6250
+
+V(Green) updated to 15.6250
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.000018
+****************************************
+
+
+****************************************
+*********** Iteration 16 ***********
+****************************************
+
+*************** State: Fairway ***************
+
+Q(Fairway, Hit to Fairway) = 12.5172
+Q(Fairway, Hit to Green) = 13.9080
+Q(Fairway, Hit in Hole) = 13.7534
+
+V(Fairway) updated to 13.9080
+
+*************** State: Green ***************
+
+Q(Green, Hit to Fairway) = 12.6717
+Q(Green, Hit to Green) = 9.8437
+Q(Green, Hit in Hole) = 15.6250
+
+V(Green) updated to 15.6250
+
+*************** State: Hole ***************
+
+Q(Hole, Hit in Hole) = 0.0000
+
+V(Hole) updated to 0.0000
+
+****************************************
+Delta: 0.000007
+****************************************
+
+
+========================================
+Optimal Values:
+========================================
+V(Fairway) = 13.9080
+V(Green) = 15.6250
+V(Hole) = 0.0000
+
+========================================
+Optimal Policy:
+========================================
+Policy(Fairway) = Hit to Green
+Policy(Green) = Hit in Hole
+Policy(Hole) = Hit in Hole

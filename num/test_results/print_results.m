@@ -1,19 +1,17 @@
-clear
-clc
-close all
+close all;
+clear;
+clc;
 
-file = 'x0_extpowell_precon.mat';
+%% Load problem file
+file = 'x0_prob82_approx-12_specific.mat';
 load(file);
 
 %% Set functions
 addpath("..\test_problems_for_unconstrained_optimization\");
-% f = @rosenbrock;
-% gradF = @rosenbrock_grad;
-% hessF = @rosenbrock_hess;
 
-f = @extended_powell_badly_scaled;
-gradF = @extended_powell_badly_scaled_grad;
-hessF = @extended_powell_badly_scaled_hess;
+% f = @extended_powell;
+% f = @extended_rosenbrock;
+f = @problem_82;
 
 %% Display results
 if failure 
@@ -32,7 +30,8 @@ if do_precon
 end
 
 %% Plot results
-% -- Contour line --
+
+% ** Contour line **
 disp('Contour line');
 
 x_dim = [min(x_seq(1, :)) - 1, max(x_seq(1, :)) + 1];
@@ -56,7 +55,7 @@ if size(x_seq, 2) > 1
 end
 hold off
 
-% -- Surface plot --
+% ** Surface plot **
 disp('Surface plot');
 
 surf_fig = figure();
