@@ -3,15 +3,15 @@ function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
     truncatedNM(f, grad_f, hess_f, x_initial, max_iteration, ...
     tollerance, c1, rho, max_backtrack, do_pcg_precond, ...
     h, specific_approx, hess_approx)
-%TRUNCATEDNM - Find a minima of a function f - Truncated Newton Method
-%
+%TRUNCATEDNM - Truncated Newton's Method
+% 
 %   Syntax
 %       [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
 %           x_sequence, backtrack_sequence, pcg_sequence] =
 %       truncatedNM(f, grad_f, hess_f, x_initial, max_iteration, ...
 %           tollerance, c1, rho, max_backtrack, do_pcg_precond)
 %   
-%   Input:
+%   Input Parameters:
 %       f - Describe the function to minimaze
 %           function handle
 %       grad_f - Compute the gradient of f
@@ -59,15 +59,13 @@ function [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
 %       pcg_sequence - pcg performance at each iteration (iteration, flag, preconditioning type)
 %           matrix
 
-%% -- Initialization --
-% Starting point
+% Starting values initialization
 x_k = x_initial;
 f_xk = f(x_k);
-
 grad_f_xk = grad_f(x_k);
 norm_grad_f_xk = norm(grad_f_xk);
 
-% Check for hessian
+% Check if hessian approximation is needed
 if isempty(hess_f)
     hess_f = @(x) hess_approx(x, h, specific_approx, grad_f, grad_f_xk);
 end
@@ -77,23 +75,29 @@ x_sequence = zeros(length(x_initial), max_iteration);
 pcg_sequence = zeros(3, max_iteration); % [iteration + flag + precond] saved at each iteration
 backtrack_sequence = zeros(max_iteration);
 
-% PCG fixed parameters
-precond = []; % default value
+% PCG default parameters
+precond = [];
 pcg_tol = 1e-6;
 pcg_maxit = 50;
 
-% Iteration variables
-i = 0;
-failure = false;
+% Stagnation variables
+stagnation = 0;
+max_stagnation = 5;
+stagn_threshold = 1e-2;
 
-%% -- Loop --
-while i < max_iteration && ...          % iteration
-        norm_grad_f_xk >= tollerance    % stopping condition
+% Iteration variables
+i = 0; % current iteration
+failure = false; 
+
+% -- Loop --
+while i < max_iteration && ...                  % iteration
+        norm_grad_f_xk >= tollerance && ...     % stopping condition
+        stagnation < max_stagnation             % stagnation
     
-    %% -- Computing descent direction --
+    % -- Computing descent direction --
     % Compute the preconditioning matrix for pcg
     A = hess_f(x_k);
-    precond_type = -1; % no preconditioning
+    precond_type = -1; % no preconditioning required
     if do_pcg_precond
         try
             try
@@ -106,6 +110,9 @@ while i < max_iteration && ...          % iteration
                 precond_type = 2; % ilu
             end
         catch ME
+            % Cannot apply preconditioning on the matrix A
+            % The algorithm continues, without apply preconditioning
+
             precond = [];
             precond_type = 0; % cannot use preconditioning
         end
@@ -116,13 +123,13 @@ while i < max_iteration && ...          % iteration
     [desc_dir, pcg_flag, ~, pcg_iter, ~] = ...
         pcg(A, -grad_f_xk, pcg_tol, pcg_maxit, precond, precond', -grad_f_xk);
 
-    % check if pcg return a NaN vector
+    % Check if pcg return a NaN vector
     if ~any(desc_dir)
         % use default value
         desc_dir = -grad_f_xk;
     end
 
-    %% -- Backtracking --
+    % -- Backtracking --
     alpha = 1; % this ensure quadratic convergence in the long run
 
     x_new = x_k + alpha*desc_dir;
@@ -145,13 +152,25 @@ while i < max_iteration && ...          % iteration
         f_new > f_xk + alpha*c1*grad_f_xk'*desc_dir
         failure = true;
         flag = 'Failure: Could not satisfy Armijo';
+
+        % No need to store the x_new, since it's not an improvment
         break
     end
 
-    %% -- Update --
+    % Check for stagnation
+    improvment = f_xk/f_new - 1;
+    % improvment < 0 means no improvment
+
+    if improvment < stagn_threshold
+        stagnation = stagnation + 1;
+    else
+        stagnation = 0;
+    end
+
+    % -- Update --
     x_k = x_new;
     f_xk = f_new;
-    grad_f_xk = grad_f(x_k);
+    grad_f_xk = grad_f(x_new);
     norm_grad_f_xk = norm(grad_f_xk);
 
     i = i + 1;
@@ -161,7 +180,7 @@ while i < max_iteration && ...          % iteration
     pcg_sequence(:, i) = [pcg_iter; pcg_flag; precond_type];
 end
 
-%% -- Save result --
+% -- Save result --
 % Final solution
 x_found = x_k;
 f_x = f_xk;
@@ -169,7 +188,7 @@ norm_grad_f_x = norm_grad_f_xk;
 iteration = i;
 
 % Resize sequence variables
-x_sequence = [x_initial, x_sequence(:, 1:iteration)];
+x_sequence = [x_initial, x_sequence(:, 1:iteration)]; % add starting value
 backtrack_sequence = backtrack_sequence(1:iteration);
 pcg_sequence = pcg_sequence(:, 1:iteration);
 
@@ -178,10 +197,15 @@ if ~failure
     if norm_grad_f_x < tollerance
         flag = sprintf('Satysfied the tollerance in %d iteration', iteration);
     else
-        flag = sprintf(['Failure: tnm did %d iteration but did not converge. ' ...
-            'Norm of the gradient = %.3g'], iteration, norm_grad_f_x);
+        if stagnation >= max_stagnation
+            flag = sprintf(['Failure: Stagnation, after %d iterations. ' ...
+                'Norm of the gradient = %.3g'], iteration, norm_grad_f_x);
+        else
+            flag = sprintf(['Failure: tnm did %d iteration but did not converge. ' ...
+                'Norm of the gradient = %.3g'], iteration, norm_grad_f_x);
+        end
+            
         failure = true;
     end
 end
-
 end

@@ -1,43 +1,67 @@
-clear;
-clc;
-close all;
+close all; clear; clc;
 
 %% Add folders
+
 addpath('test_problems_for_unconstrained_optimization\');
 addpath("starting_points\");
 
-%% Variables Initialization
-% Function + starting points
-load('Ext_Powell.mat');
+%% Variables Initialization and tuning
+
+% *** Function + starting points ***
+% Choose among:
+%   'Problem_82.mat'
+%   'Ext_Rosenbrock.mat'
+%   'Ext_Powell.mat'
+% % %
+load('Problem_82.mat');
 
 % Outer loop
-max_iterations = 2000;
-tollerance = 1e-5;
+max_iterations = 5000;
+tollerance = 1e-6;
 
 % Backtracking
 max_back_iterations = 50;
-c1 = 1e-3;
-rho = .6;
+c1 = 1e-4;
+rho = .5;
 
 % PCG preconditioning
-do_precondintioning = false;
+do_precondintioning = false;    
 
 % Hessian approximation
 h_approximation = 1e-12;
 specific_approx = false;
 
-%% Choose points to analyze
-point = 1:11;
+do_hess_approx = false;
+if do_hess_approx
+    hess_f = [];
+end
+
+%% Choose points to analyze and plots to display
+
+% Set which point you want to analyze
+%
+%       1 --> Default starting point (improved convergence)
+% [2, 11] --> correspondent to the 10 points randomly generated
+%
+% Multiple points can be run, just by setting variable
+%  'point' as a list that ranges between integers
+%   e.g. 1:4 will run the default point + first 3 randomly generated
+%       2:4 will run first 3 randomly generated
+%       1:11 will run all point (defualt + the 10 randomly generated)
+point = 1:4;
 
 % Stats
 tot_success = 3*length(point);
+
+% Plots to display
+plot_rate_convergence = false;
 
 %% Dimension 1000
 for i = point
     x_0 = x_1000(:, i);
 
     fprintf("PROBLEM DIMENSION: %d\n", length(x_0));
-    fprintf("x_%d = ", i); print_summary(x_0);
+    fprintf("x_%d = ", i-1); print_summary(x_0);
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
@@ -53,15 +77,14 @@ for i = point
 
     % Order of convergence
     if iteration > 1
-        rate_convergence(iteration, min_1000, x_sequence, i);
+        if plot_rate_convergence
+            rate_convergence(iteration, min_1000, x_sequence, i);
+        end
     end
 
     % Stats
     tot_success = tot_success - failure;
 
-    % Pausing
-    % pause;
-    % close all;
     fprintf("\n\n");
 end
 
@@ -70,7 +93,7 @@ for i = point
     x_0 = x_10000(:, i);
 
     fprintf("PROBLEM DIMENSION: %d\n", length(x_0));
-    fprintf("x_%d = ", i); print_summary(x_0);
+    fprintf("x_%d = ", i-1); print_summary(x_0);
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
@@ -86,15 +109,14 @@ for i = point
 
     % Order of convergence
     if iteration > 1
-        rate_convergence(iteration, min_10000, x_sequence, i);
+        if plot_rate_convergence
+            rate_convergence(iteration, min_10000, x_sequence, i);
+        end
     end
 
     % Stats
     tot_success = tot_success - failure;
 
-    % Pausing
-    % pause;
-    % close all;
     fprintf("\n\n");
 end
 
@@ -103,7 +125,7 @@ for i = point
     x_0 = x_100000(:, i);
 
     fprintf("PROBLEM DIMENSION: %d\n", length(x_0));
-    fprintf("x_%d = ", i); print_summary(x_0);
+    fprintf("x_%d = ", i-1); print_summary(x_0);
     
     tic;
     [x_found, f_x, norm_grad_f_x, iteration, failure, flag, ...
@@ -119,15 +141,14 @@ for i = point
 
     % Order of convergence
     if iteration > 1
-        rate_convergence(iteration, min_100000, x_sequence, i);
+        if plot_rate_convergence
+            rate_convergence(iteration, min_100000, x_sequence, i);
+        end
     end
 
     % Stats
     tot_success = tot_success - failure;
 
-    % Pausing
-    % pause;
-    % close all;
     fprintf("\n\n");
 end
 
@@ -140,6 +161,14 @@ function print_output(flag, sol, f_x, norm_grad, iters, max_iters, time)
     fprintf("NORM OF THE GRADIENT = %.3g\n", norm_grad);
     fprintf("ITERATIONS PERFORMED: %d/%d\n", iters, max_iters);
     fprintf("EXECUTION TIME: %f s\n", time);
+end
+
+function print_summary(vector)
+    fprintf("[");
+    fprintf(" %.3f ", vector(1:4));
+    fprintf("...");
+    fprintf(" %.3f ", vector(end-3:end));
+    fprintf("]\n");
 end
 
 function rate_convergence(iterations, actual_minimum, sequence, i)
@@ -167,12 +196,4 @@ function rate_convergence(iterations, actual_minimum, sequence, i)
     nexttile
     title('Quadratic convergence');
     plot(1:iterations, quadratic, '-r');
-end
-
-function print_summary(vector)
-    fprintf("[");
-    fprintf(" %.3f ", vector(1:4));
-    fprintf("...");
-    fprintf(" %.3f ", vector(end-3:end));
-    fprintf("]\n");
 end
