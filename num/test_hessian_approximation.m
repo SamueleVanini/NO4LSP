@@ -3,6 +3,7 @@ clear;
 clc;
 
 %% Setup
+addpath('test_problems_for_unconstrained_optimization\');
 
 % 500 random points
 rng(0);
@@ -16,16 +17,19 @@ fprintf("Dimension of the problem: %d\n", n);
 
 % Function
 % fprintf("-- Extended Powell\n\n");
+% func_name = 'Extended Powell';
 % grad_f = @extended_powell_grad;
 % hess_f = @extended_powell_hess;
 % appr = @extended_powell_hess_approx;
 
 % fprintf("-- Extended Rosenbrock\n\n");
+% func_name = 'Extended Rosenbrock';
 % grad_f = @extended_rosenbrock_grad;
 % hess_f = @extended_rosenbrock_hess;
 % appr = @extended_rosenbrock_hess_approx;
 
 fprintf("-- Problem 82\n\n");
+func_name = 'Problem 82';
 grad_f = @problem_82_grad;
 hess_f = @problem_82_hess;
 appr = @problem_82_hess_approx;
@@ -83,7 +87,7 @@ plot(x_axes, avg_time3 * ones(n_points, 1), '--', 'LineWidth', .5);
 xlabel('Execution Number');
 ylabel('Execution Time (seconds)');
 legend('Exact Hessian', 'Approximated Hessian', 'Specific Approximated Hessian', 'Avg Exact', 'Avg Approximated', 'Avg Specific Approximated');
-title('Execution Time');
+title([func_name ' - Execution Time']);
 
 grid on;
 box on;
