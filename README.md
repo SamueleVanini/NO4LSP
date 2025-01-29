@@ -29,5 +29,5 @@ The following steps will guide you on the set-up to run the module:
     python stoc/main.py
     ```
 
-## Numerical module (matlab)
+## Numerical module (Matlab)
 To run the module simply download the repo and run one among `MNM_test.m` or `TNM_test.m` for obtaining results of respectively Modified Newton Method (Newton Method with matrix correction) and Truncated Newton Method. These will call the respective methods, defined as functions in `modifiedNM.m` and `truncatedNM.m` in a problem of choice, which can be set by following comments at the start of the test files.
