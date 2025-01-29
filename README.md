@@ -6,7 +6,7 @@ The repository is divided in 2 different folders: `num` for the Variants of Newt
 
 Reports are available in the respective pdfs: `report_numerical_optimization.pdf` and `report_stochastic_optimization.pdf`
 
-We kindly advice to first read the reports provided to have a broad idea of what the scope of this project is.
+We kindly advice to first read the reports provided to get a general idea of what the scope of this project is.
 
 # How to run
 
